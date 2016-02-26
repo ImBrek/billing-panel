@@ -8,7 +8,7 @@ const API_ROOT = 'http://192.168.0.112:8000/';
 
 // Fetches an API response and normalizes the result JSON according to schema.
 // This makes every API response have the same shape, regardless of how nested it was.
-function callApi(action = API_READ, endpoint, params = {}, schema ,token) {
+function callApi(action = API_READ, endpoint, params = {}, schema, token) {
     const fullUrl = (endpoint.indexOf(API_ROOT) === -1) ? API_ROOT + endpoint : endpoint;
     let body;
     let searchParams = '';
@@ -29,12 +29,12 @@ function callApi(action = API_READ, endpoint, params = {}, schema ,token) {
         [API_DELETE]: 'DELETE'
     };
 
-    return fetch(fullUrl + searchParams + '/', {
+    return fetch(fullUrl + '/' + searchParams, {
         method: methods[action],
         headers: {
             'Accept': 'application/json',
             'Content-Type': 'application/json',
-            'Authorization':`Token ${token}`
+            'Authorization': `Token ${token}`
         },
         body
     })
@@ -112,13 +112,17 @@ export default store => next => reduxAction => {
 
     next(requestType(preparePayload()));
 
-    const token = get(store.getState(),'token.key');
+    const token = get(store.getState(), 'token.key');
 
     return callApi(action, endpoint, params, schema, token)
         .then(
-            response => next(successType(preparePayload({
-                response
-            }))),
+            response => {
+                setTimeout(function () {
+                    next(successType(preparePayload({
+                        response
+                    })))
+                },1000)
+            },
             error => next(failureType(error))
         );
 };

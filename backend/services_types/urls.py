@@ -6,7 +6,7 @@ from . import views
 
 router = DefaultRouter()
 router.register(r'services', views.ServiceViewSet)
-router.register(r'types', views.TypeViewSet)
+router.register(r'categories', views.CategoryViewSet)
 router.register(r'options', views.OptionViewSet)
 router.register(r'option-values', views.OptionValueViewSet)
 

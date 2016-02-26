@@ -1,61 +1,40 @@
 import React, { Component, PropTypes,cloneElement  } from 'react';
 import { connect } from 'react-redux';
-
-import {requestedCountChange} from 'actions/infoBlocksManager';
-import { searchShow,searchStart } from 'actions/infoBlocks/search';
 import { createSelector } from 'reselect';
+import {Navbar,Nav,NavItem,MenuItem,NavDropdown} from 'react-bootstrap/lib';
 
-export class NavBar extends Component {
-    constructor (props) {
+export class NavigationBar extends Component {
+    constructor(props) {
         super(props);
         this.render.bind(this);
     }
 
-    render () {
-        return <nav className="navbar navbar-dark bg-inverse">
-            <ul className="nav navbar-nav">
-                <li className="nav-item">
-                    <button className="btn btn-secondary-outline" title="Новый девайс"><i
-                        className="fa fa-plus"></i></button>
-                </li>
-                <li className="nav-item">
-                    <button className="btn btn-secondary-outline"
-                            ref="searchStart"
-                            onClick={this.props.searchShow}
-                            title="Новый поиск">
-                            <i className="fa fa-search"></i>
-                    </button>
-                </li>
-                <li className="nav-item">
-                    <button className="btn btn-secondary-outline"
-                            onClick={this.props.searchShow}
-                            title="Отмена"><i
-                        className="fa fa-arrow-left"></i></button>
-                </li>
-                <li className="nav-item">
-                    <button className="btn btn-secondary-outline" title="Отмена отмены)"><i
-                        className="fa fa-arrow-right"></i></button>
-                </li>
-            </ul>
-            <form className="form-inline pull-xs-right">
-                <div className="form-group">
-                    <label>Блоки {this.props.blocks.requestedCount} / {this.props.blocks.possibleCount} </label>
-                    <input ref="requestedCount" className="form-control" value={this.props.blocks.requestedCount} type="number" min="1" max={this.props.blocks.possibleCount} onChange={e => {
-                        this.props.requestedCountChange(e.target.value);
-                    }}/>
-                </div>
-            </form>
-        </nav>;
+    render() {
+        return (
+            <Navbar>
+                <Navbar.Header>
+                    <Navbar.Brand>
+                        <a href="#">Billing</a>
+                    </Navbar.Brand>
+                </Navbar.Header>
+                <Nav>
+                    <NavItem eventKey={1} href="#">Management services</NavItem>
+                </Nav>
+                <Nav pullRight>
+                    <NavDropdown id="a1" eventKey={3} title={
+                        <span><i className="fa fa-user"></i> Brek</span>
+                    }>
+                        <MenuItem eventKey={3.1}>Brek</MenuItem>
+                        <MenuItem eventKey={3.2}>Change password</MenuItem>
+                        <MenuItem divider/>
+                        <MenuItem eventKey={3.3}>Logout</MenuItem>
+                    </NavDropdown>
+                </Nav>
+            </Navbar>
+        )
     }
 }
 export const selector = createSelector(
-    state => state.getIn(['infoBlocksManager','blocks']),
-    blocks=>{return {
-        blocks:blocks.toJS()
-    };}
-);;
+);
 
-export default connect(selector, {
-    requestedCountChange,
-    searchShow,
-})(NavBar);
+export default connect()(NavigationBar);

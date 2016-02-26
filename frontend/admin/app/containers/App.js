@@ -1,6 +1,9 @@
 import React, { Component, PropTypes } from 'react'
 import { connect } from 'react-redux'
 import { browserHistory } from 'react-router'
+import { createSelector } from 'reselect';
+
+import DialogsManager from 'components/DialogsManager'
 
 class App extends Component {
     constructor(props) {
@@ -12,6 +15,7 @@ class App extends Component {
         return (
             <div>
                 {children}
+                <DialogsManager dialog={this.props.dialog}/>
             </div>
         )
     }
@@ -21,9 +25,14 @@ App.propTypes = {
     children: PropTypes.node
 }
 
-function mapStateToProps(state, ownProps) {
-    return {
+export const selector = createSelector(
+    state => state.dialog,
+    (dialog)=>{
+        return {
+            dialog
+        }
     }
-}
+);
 
-export default connect(mapStateToProps, {})(App)
+
+export default connect(selector, {})(App)

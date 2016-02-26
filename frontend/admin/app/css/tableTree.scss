@@ -1,0 +1,24 @@
+.table-tree {
+  .expand-control {
+    margin-right:1em;
+    cursor: pointer;
+  }
+  .level-1 {
+    .intend {
+      position: relative;
+      left: 2rem;
+    }
+  }
+  .level-2 {
+    .intend {
+      position: relative;
+      left: 4rem;
+    }
+  }
+  .level-3 {
+    .intend {
+      position: relative;
+      left: 6rem;
+    }
+  }
+}

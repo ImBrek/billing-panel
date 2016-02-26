@@ -16,4 +16,31 @@ html, body {
   box-shadow: 0 0 5px #000;
   padding: 1rem; }
 
+.table-tree .expand-control {
+  margin-right: 1em;
+  cursor: pointer; }
+.table-tree .level-1 .intend {
+  position: relative;
+  left: 2rem; }
+.table-tree .level-2 .intend {
+  position: relative;
+  left: 4rem; }
+
+.services-page {
+  margin-top: 1em;
+  display: flex; }
+  .services-page .control-panel {
+    flex-shrink: 0;
+    width: 55px;
+    display: block;
+    padding: 0 0.5rem; }
+    .services-page .control-panel button {
+      float: left;
+      padding-top: 3px;
+      margin-bottom: 10px;
+      border: 1px solid gray;
+      border-radius: 4px; }
+  .services-page .content {
+    width: 100%; }
+
 /*# sourceMappingURL=index.css.map */

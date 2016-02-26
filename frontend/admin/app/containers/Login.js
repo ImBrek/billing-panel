@@ -31,15 +31,15 @@ class Login extends Component {
         return (
             <div className="col-sm-3 col-sm-offset-4 login-form">
                 {message}
-                <form onSubmit={this.handleLoginClick}>
+                <form onSubmit={this.handleLoginClick} className="form-horizontal">
                     <div className="form-group row">
-                        <label className="col-sm-3 form-control-label">Username</label>
+                        <label className="col-sm-3 control-label">Username</label>
                         <div className="col-sm-9">
                             <input type="text" ref="username" className="form-control" placeholder="Username" defaultValue="vagrant"/>
                         </div>
                     </div>
                     <div className="form-group row">
-                        <label className="col-sm-3 form-control-label">Password</label>
+                        <label className="col-sm-3 control-label">Password</label>
                         <div className="col-sm-9">
                             <input type="password" ref="password" className="form-control" placeholder="Password" defaultValue="vagrant"/>
                         </div>

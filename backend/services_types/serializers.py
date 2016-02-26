@@ -1,29 +1,36 @@
 from rest_framework import serializers, exceptions
 from common.serializers import DynamicModelSerializer
 
-from .models import Service, Type, Option, OptionValue
+from .models import Service, Category, Option, OptionValue
 
 
-class TypeSerializer(serializers.ModelSerializer):
+class OptionValueSerializer(DynamicModelSerializer):
     class Meta:
-        model = Type
-        fields = ('title', 'services')
-        depth = 2
+        model = OptionValue
 
 
-class ServiceSerializer(DynamicModelSerializer):
-    class Meta:
-        model = Service
-        fields = ('title', 'options')
-        #        extra_fields = ('type', 'options')
-        depth = 2
+class OptionSerializer(DynamicModelSerializer):
+    values = OptionValueSerializer(many=True)
 
-
-class OptionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Option
 
 
-class OptionValueSerializer(serializers.ModelSerializer):
+class ServiceSerializer(DynamicModelSerializer):
+    options = OptionSerializer(many=True)
+
     class Meta:
-        model = OptionValue
+        model = Service
+
+
+class CategorySerializer(DynamicModelSerializer):
+    services = ServiceSerializer(many=True)
+
+    class Meta:
+        model = Category
+
+
+
+
+
+ServiceSerializer._declared_fields['type'] = CategorySerializer()

@@ -1,0 +1,21 @@
+.services-page{
+  display: flex;
+  .control-panel{
+    flex-shrink: 0;
+
+    width: 55px;
+    display: block;
+    padding: 0 0.5rem;
+    button{
+      float: left;
+      padding-top:3px;
+      margin-bottom:10px;
+      border: 1px solid gray;
+      border-radius: 4px;
+    }
+  }
+  .content{
+    width: 100%;
+  }
+}
+

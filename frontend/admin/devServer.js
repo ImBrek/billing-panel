@@ -15,14 +15,6 @@ app.use(require('webpack-hot-middleware')(compiler));
 app.get('dist/*', function (req, res) {
     res.sendFile(path.join(__dirname, req.url));
 });
-//
-//app.get('/static/*', function (req, res) {
-//    res.sendFile(path.join(__dirname, req.url));
-//});
-//
-//app.get('/node_modules/*', function (req, res) {
-//    res.sendFile(path.join(__dirname, req.url));
-//});
 
 app.use(function(req, res) {
   res.sendFile(__dirname + '/app/index.html')

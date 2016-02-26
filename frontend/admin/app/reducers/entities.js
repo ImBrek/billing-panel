@@ -2,11 +2,15 @@ import {get} from 'lodash/object'
 import merge from 'lodash/merge'
 
 const initValue = {
-    tokens: {}
+    tokens: {},
+    stCategories:{},
+    stServices:{},
+    stOptions:{},
+    stValues:{}
 }
 
 export default function entities(state = initValue, action) {
-    const entities = get(action,'payload.reponse.entities');
+    const entities = get(action,'payload.response.entities');
     if (entities){
         return merge({}, state, entities)
     }
