@@ -24,7 +24,7 @@ function callApi(action = API_READ, endpoint, params = {}, schema, token) {
 
     const methods = {
         [API_READ]: 'GET',
-        [API_UPDATE]: 'PUT',
+        [API_UPDATE]: 'PATCH',
         [API_CREATE]: 'POST',
         [API_DELETE]: 'DELETE'
     };

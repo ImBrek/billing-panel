@@ -1,6 +1,6 @@
 import React, { Component, PropTypes } from 'react'
 
-import ServiceCreateDialog from 'containers/dialogs/service/Create'
+import ServiceUpdateDialog from 'containers/dialogs/service/Update'
 
 class DialogsManager extends Component {
     constructor(props) {
@@ -10,8 +10,8 @@ class DialogsManager extends Component {
     render() {
         if (this.props.dialog){
             switch (this.props.dialog.type) {
-                case 'serviceCreate':
-                    return <ServiceCreateDialog/>;
+                case 'serviceUpdate':
+                    return <ServiceUpdateDialog/>;
                 default:
                     <div>ХЗ!</div>
             }

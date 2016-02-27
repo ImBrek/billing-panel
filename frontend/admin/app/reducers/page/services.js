@@ -1,16 +1,18 @@
 import {cloneDeep} from 'lodash/lang'
 
+import { PAGE_REGISTER } from 'actions/pages';
 import { CATEGORY_REQUEST,CATEGORY_SUCCESS,CATEGORY_FAILURE } from 'actions/categories'
 
-const initialState = {
-    servicesTree: {
-        isFetching: false
-    }
-};
-
-export default function (state = initialState, action) {
+export default function (state, action) {
     let newState;
     switch (action.type) {
+        case PAGE_REGISTER:
+            return {
+                name: 'services',
+                servicesTree: {
+                    isFetching: false
+                }
+            }
         case CATEGORY_REQUEST:
             newState = cloneDeep(state);
             newState.servicesTree.isFetching = true;
