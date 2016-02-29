@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import { routerReducer as routing } from 'react-router-redux';
 import entities from './entities';
-import page from './page';
+import pages from './pages';
 import token from './token';
 import dialog from './dialog';
 import {reducer as formReducer} from 'redux-form';
@@ -9,7 +9,7 @@ import {reducer as formReducer} from 'redux-form';
 const rootReducer = combineReducers({
     routing,
     entities,
-    page,
+    pages,
     token,
     dialog,
     form: formReducer

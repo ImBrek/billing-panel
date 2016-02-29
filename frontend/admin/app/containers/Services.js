@@ -6,16 +6,15 @@ import classNames from 'classnames'
 
 import NavBar from 'containers/NavBar'
 import {getServicesTree} from 'actions/categories'
-import {serviceUpdateShow,serviceCreateShow} from 'actions/dialogs'
-import {pageRegister} from 'actions/pages'
+import {selectEntity} from 'actions/entities'
+import {serviceUpdateShow,serviceCreateShow,optionUpdateShow,optionCreateShow} from 'actions/dialogs'
+import {pageActivate} from 'actions/pages'
 //import ServicesTree from 'components/ServicesTree'
 
 class Services extends Component {
     constructor(props) {
         super(props);
         this.refreshServicesTree = this.refreshServicesTree.bind(this);
-        this.handleButtonClick = this.handleButtonClick.bind(this);
-        this.handleButtonClick1 = this.handleButtonClick1.bind(this);
         //this.render = this.render.bind(this);
     }
 
@@ -24,39 +23,48 @@ class Services extends Component {
     }
 
     componentWillMount() {
-        this.props.pageRegister();
+        this.props.pageActivate();
         this.refreshServicesTree();
     }
 
-    handleButtonClick(e) {
-        this.props.serviceUpdateShow(1)
-    }
-    handleButtonClick1(e) {
-        this.props.serviceCreateShow(1)
-    }
-
     render() {
-        const buttonStatus = classNames('fa', 'fa-refresh', {
-            'fa-spin': this.props.page.servicesTree.isFetching
-        })
         return (
             <div>
                 <NavBar />
                 <div className="services-page">
                     <div className="control-panel">
-                        <button className="fa fa-plus fa-2x" onClick={this.handleButtonClick}>
+                        <button
+                            title="Edit selected service"
+                            className={classNames('fa','fa-edit','fa-2x',{hide:this.props.page.selectedEntity.type != 'stServices'})}
+                            onClick={()=>{this.props.serviceUpdateShow(this.props.page.selectedEntity.id)}}>
                         </button>
-                        <button className="fa fa-plus fa-2x" onClick={this.handleButtonClick1}>
+                        <button
+                            title="Create new service"
+                            className={classNames('fa','fa-plus','fa-2x',{hide:(this.props.page.selectedEntity.type != 'stCategories')})}
+                            onClick={()=>{this.props.serviceCreateShow(this.props.page.selectedEntity.id)}}>
                         </button>
-                        <button className="fa fa-plus fa-2x">
+                        <button
+                            title="Edit selected option"
+                            className={classNames('fa','fa-edit','fa-2x',{hide:this.props.page.selectedEntity.type != 'stOptions'})}
+                            onClick={()=>{this.props.optionUpdateShow(this.props.page.selectedEntity.id)}}>
                         </button>
-                        <button className="fa fa-plus fa-2x">
+                        <button
+                            title="Create new option"
+                            className={classNames('fa','fa-plus','fa-2x',{hide:(this.props.page.selectedEntity.type != 'stServices')})}
+                            onClick={()=>{this.props.optionCreateShow(this.props.page.selectedEntity.id)}}>
+                        </button>
+                        <button
+                            title="Refresh"
+                            className={classNames('fa','fa-refresh','fa-2x',{'fa-spin': this.props.page.isFetching})}
+                            onClick={this.refreshServicesTree}>
                         </button>
                     </div>
                     <div className="content">
-                        <button className="btn btn-primary pull-right" onClick={this.refreshServicesTree}><i
-                            className={buttonStatus}></i></button>
-                        <ServicesTree tree={this.props.servicesTree}/>
+                        <ServicesTree
+                            tree={this.props.servicesTree}
+                            selectEntity={this.props.selectEntity}
+                            selectedEntity={this.props.page.selectedEntity}
+                        />
                     </div>
                 </div>
 
@@ -67,7 +75,7 @@ class Services extends Component {
 
 
 export const selector = createSelector(
-    state => state.page,
+    state => state.pages.services,
     state => state.entities.stCategories,
     state => state.entities.stServices,
     state => state.entities.stOptions,
@@ -99,7 +107,10 @@ export default connect(selector, {
     getServicesTree,
     serviceCreateShow,
     serviceUpdateShow,
-    pageRegister
+    optionCreateShow,
+    optionUpdateShow,
+    pageActivate,
+    selectEntity
 })(Services)
 
 class ServicesTree extends Component {
@@ -108,7 +119,10 @@ class ServicesTree extends Component {
     }
 
     renderCategory(category) {
-        return <tr className="level-0" key={'c'+category.id}>
+        return <tr
+            className={classNames("level-0",{info:this.props.selectedEntity.id == category.id && this.props.selectedEntity.type=='stCategories'})}
+            key={'c'+category.id}
+            onClick={()=>{this.props.selectEntity(category.id,'stCategories')}}>
             <td>
                 <i className="fa fa-minus expand-control"></i>
                 <span className="intend"> {category.title}</span>
@@ -117,8 +131,12 @@ class ServicesTree extends Component {
             <td>{category.description}</td>
         </tr>
     }
+
     renderService(service) {
-        return <tr className="level-1" key={'s'+service.id}>
+        return <tr
+            className={classNames("level-1",{info:this.props.selectedEntity.id == service.id && this.props.selectedEntity.type=='stServices'})}
+            key={'s'+service.id}
+            onClick={()=>{this.props.selectEntity(service.id,'stServices')}}>
             <td>
                 <i className="fa fa-minus expand-control"></i>
                 <span className="intend"> {service.title}</span>
@@ -127,8 +145,12 @@ class ServicesTree extends Component {
             <td>{service.description}</td>
         </tr>
     }
+
     renderOption(option) {
-        return <tr className="level-2" key={'o'+option.id}>
+        return <tr
+            className={classNames("level-2",{info:this.props.selectedEntity.id == option.id && this.props.selectedEntity.type=='stOptions'})}
+            key={'o'+option.id}
+            onClick={()=>{this.props.selectEntity(option.id,'stOptions')}}>
             <td>
                 <i className="fa fa-minus expand-control"></i>
                 <span className="intend"> {option.title}</span>
@@ -137,11 +159,12 @@ class ServicesTree extends Component {
             <td>{option.description}</td>
         </tr>
     }
+
     renderValue(value) {
         return <tr className="level-3" key={'v'+value.id}>
             <td>
                 <i className="fa fa-minus expand-control"></i>
-                <span className="intend"> {value.title}</span>
+                <span className="intend">{value['value']}</span>
             </td>
             <td>{value.cost}</td>
             <td>{value.description}</td>
@@ -152,12 +175,12 @@ class ServicesTree extends Component {
         let table = [];
         this.props.tree.forEach((category)=> {
             table.push(this.renderCategory(category))
-            category.services.forEach((service)=>{
+            category.services.forEach((service)=> {
                 table.push(this.renderService(service))
-                service.options.forEach((option)=>{
+                service.options.forEach((option)=> {
                     table.push(this.renderOption(option))
-                    option.values.forEach((value)=>{
-                        if (option.type === 0){
+                    option.values.forEach((value)=> {
+                        if (option.type === 1) {
                             table.push(this.renderValue(value))
                         }
                     })
@@ -174,7 +197,7 @@ class ServicesTree extends Component {
                 </tr>
                 </thead>
                 <tbody>
-                    {table}
+                {table}
                 </tbody>
             </table>
         )

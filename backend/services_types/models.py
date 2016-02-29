@@ -32,8 +32,8 @@ class Option(models.Model):
     Required options for service
     """
 
-    TYPE_SELECT = 0
-    TYPE_INPUT = 1
+    TYPE_SELECT = 1
+    TYPE_INPUT = 0
     TYPES_CHOICES = (
         (TYPE_SELECT, 'select'),
         (TYPE_INPUT, 'input'),

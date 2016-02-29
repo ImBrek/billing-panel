@@ -8,20 +8,21 @@ const stOption = new Schema('stOptions');
 const stValue = new Schema('stValues');
 
 stCategory.define({
-    services:arrayOf(stService)
+    services: arrayOf(stService)
 })
 
 stService.define({
-    options:arrayOf(stOption)
+    options: arrayOf(stOption)
 })
 
 stOption.define({
-    values:arrayOf(stValue)
+    values: arrayOf(stValue)
 })
 
 export default {
     TOKEN: token,
-    ST_CATEGORY:stCategory,
-    ST_CATEGORY_ARRAY:arrayOf(stCategory),
-    ST_SERVICE:stService
+    ST_CATEGORY: stCategory,
+    ST_CATEGORY_ARRAY: arrayOf(stCategory),
+    ST_SERVICE: stService,
+    ST_OPTION: stOption
 };

@@ -1,7 +1,7 @@
 import React, { Component, PropTypes } from 'react'
 import {reduxForm} from 'redux-form';
 import { createSelector } from 'reselect'
-import { Modal,Input} from 'react-bootstrap'
+import { Modal} from 'react-bootstrap'
 import  classnames  from 'classnames'
 
 import {hideDialog} from 'actions/dialogs'
@@ -28,7 +28,7 @@ class Update extends Component {
                 this.props.hideDialog();
             })
         } else {
-            this.props.createService({...data, category: 1}).then(()=> {
+            this.props.createService({...data, category: this.props.dialog.categoryId}).then(()=> {
                 this.props.getServicesTree();
                 this.props.hideDialog();
             })

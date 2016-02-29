@@ -1,8 +1,8 @@
 import { createAction } from 'redux-actions';
 
-export const PAGE_REGISTER = 'PAGE_REGISTER';
+export const PAGE_ACTIVATE = 'PAGE_ACTIVATE';
 
-export const pageRegister = createAction(PAGE_REGISTER, (name) => {
+export const pageActivate = createAction(PAGE_ACTIVATE, (name) => {
     return {
         name
     };
