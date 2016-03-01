@@ -74,7 +74,7 @@ class Update extends Component {
 function validate(values) {
     const errors = {};
     if (!values.title) errors.title = 'Required';
-    if (!values.cost) errors.cost = 'Required';
+    if (values.cost === undefined) errors.cost = 'Required';
     return errors;
 }
 

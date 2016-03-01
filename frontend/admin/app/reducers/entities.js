@@ -10,9 +10,8 @@ const initValue = {
 }
 
 export default function entities(state = initValue, action) {
-    const entities = get(action,'payload.response.entities');
-    if (entities){
-        return merge({}, state, entities)
+    if (action.meta && action.meta.normalizr){
+        return merge({}, state, action.payload.entities)
     }
 
     return state;

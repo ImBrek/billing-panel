@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 
-import { CALL_API,API_CREATE,API_READ,API_UPDATE } from 'middleware/api';
+import { CALL_API,API_CREATE,API_READ,API_UPDATE } from 'middleware/apiExt';
 import schemas from 'middleware/schemas';
 
 export const OPTION_REQUEST = 'OPTION_REQUEST';
@@ -13,7 +13,7 @@ export const createOption = createAction(OPTION_REQUEST, (data) => {
         [CALL_API]: {
             action: API_CREATE,
             endpoint: 'services-types/options',
-            params: data,
+            body: data,
             types: [OPTION_REQUEST, OPTION_SUCCESS, OPTION_FAILURE],
             schema: schemas.ST_OPTION
         }
@@ -25,7 +25,7 @@ export const updateOption = createAction(OPTION_REQUEST, (id,data) => {
         [CALL_API]: {
             action: API_UPDATE,
             endpoint: `services-types/options/${id}`,
-            params: data,
+            body: data,
             types: [OPTION_REQUEST, OPTION_SUCCESS, OPTION_FAILURE],
             schema: schemas.ST_OPTION
         }

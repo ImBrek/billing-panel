@@ -164,7 +164,7 @@ class ServicesTree extends Component {
         return <tr className="level-3" key={'v'+value.id}>
             <td>
                 <i className="fa fa-minus expand-control"></i>
-                <span className="intend">{value['value']}</span>
+                <span className="intend">{value.title}</span>
             </td>
             <td>{value.cost}</td>
             <td>{value.description}</td>

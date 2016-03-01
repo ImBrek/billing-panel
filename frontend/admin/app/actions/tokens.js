@@ -1,6 +1,6 @@
 import { createAction } from 'redux-actions';
 
-import { CALL_API,API_CREATE } from 'middleware/api';
+import { CALL_API,API_CREATE } from 'middleware/apiExt';
 import schemas from 'middleware/schemas';
 import { browserHistory } from 'react-router';
 
@@ -26,6 +26,7 @@ export const getToken = createAction('TOKEN_REQUEST', (username, password) => {
 export const login = function (username, password) {
     return function (dispatch) {
         return dispatch(getToken(username, password)).then((action)=> {
+            //console.log(action);
             if (action.type == TOKEN_SUCCESS) {
                 localStorage.setItem('billing.token', JSON.stringify(action.payload.response.entities.tokens[action.payload.response.result]));
                 browserHistory.push(`/dashboard`);

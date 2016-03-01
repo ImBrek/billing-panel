@@ -1,6 +1,7 @@
 import { createStore,applyMiddleware,compose } from 'redux';
 import rootReducer from 'reducers';
-import api from 'middleware/api';
+import apiExt from 'middleware/apiExt';
+import {apiMiddleware} from 'redux-api-middleware';
 import promiseMiddleware from 'redux-promise';
 
 import createLogger from 'redux-logger';
@@ -10,7 +11,7 @@ export default function configureStore() {
     const logger = createLogger();
 
     const finalCreateStore = compose(
-        applyMiddleware(thunk, api, logger),
+        applyMiddleware(thunk,apiExt,apiMiddleware, logger),
         window.devToolsExtension ? window.devToolsExtension() : f => f
     )(createStore);
 

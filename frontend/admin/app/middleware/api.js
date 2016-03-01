@@ -28,14 +28,18 @@ function callApi(action = API_READ, endpoint, params = {}, schema, token) {
         [API_CREATE]: 'POST',
         [API_DELETE]: 'DELETE'
     };
+    var headers =  {
+            'Accept': 'application/json',
+            'Content-Type': 'application/json',
+        }
+
+    if (token){
+        headers['Authorization'] = `Token ${token}`
+    }
 
     return fetch(fullUrl + '/' + searchParams, {
         method: methods[action],
-        headers: {
-            'Accept': 'application/json',
-            'Content-Type': 'application/json',
-            'Authorization': `Token ${token}`
-        },
+        headers ,
         body
     })
         .then(response =>
@@ -117,11 +121,9 @@ export default store => next => reduxAction => {
     return callApi(action, endpoint, params, schema, token)
         .then(
             response => {
-                setTimeout(function () {
                     next(successType(preparePayload({
                         response
                     })))
-                },1000)
             },
             error => next(failureType(error))
         );

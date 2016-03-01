@@ -1,8 +1,13 @@
 from rest_framework import serializers
 from collections import OrderedDict
 from rest_framework.fields import SkipField
+from rest_framework.exceptions import APIException,ValidationError
 
 class DynamicModelSerializer(serializers.ModelSerializer):
+
+    def __repr__(self):
+        return 'TODO: create repr'
+
     def expand(self, expand, *args, **kwargs):
         if expand is None:
             return
@@ -41,13 +46,19 @@ class DynamicModelSerializer(serializers.ModelSerializer):
                     continue
 
             if attribute is None:
-                # We skip `to_representation` for `None` values so that
-                # fields do not have to explicitly deal with that case.
                 ret[field.field_name] = None
             else:
                 ret[field.field_name] = field.to_representation(attribute)
 
         return ret
+
+    def update(self, instance, validated_data):
+        validated_data.pop('id',None)
+        return super().update(instance, validated_data)
+
+    def create(self, validated_data):
+        validated_data.pop('id',None)
+        return super().create(validated_data)
 
     def __init__(self, *args, **kwargs):
         self.expand(kwargs.pop('expand', None))

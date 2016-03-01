@@ -57,7 +57,7 @@ class OptionValue(models.Model):
     cost = models.FloatField(default=0)
     option = models.ForeignKey(Option, on_delete=models.CASCADE, related_name='values')
     cost = models.FloatField(default=0)
-    value = models.CharField(max_length=200)
+    title = models.CharField(max_length=200)
 
     def __str__(self):
         return self.value
