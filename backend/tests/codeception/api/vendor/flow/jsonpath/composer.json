@@ -1,0 +1,21 @@
+{
+    "name": "flow/jsonpath",
+    "description": "JSONPath implementation for parsing, searching and flattening arrays",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Stephen Frank",
+            "email": "stephen@flowsa.com"
+        }
+    ],
+    "autoload": {
+      "psr-0": {
+        "Flow\\JSONPath": "src/",
+        "Flow\\JSONPath\\Test": "tests/"
+      }
+    },
+    "require-dev": {
+      "peekmo/jsonpath": "dev-master",
+      "phpunit/phpunit": "dev-master"
+    }
+}

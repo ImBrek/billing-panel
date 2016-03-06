@@ -64,8 +64,11 @@ Vagrant.configure(2) do |config|
   # Enable provisioning with a shell script. Additional provisioners such as
   # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
   # documentation for more information about their specific syntax and use.
-  # config.vm.provision "shell", inline: <<-SHELL
-  #   sudo apt-get update
-  #   sudo apt-get install -y apache2
-  # SHELL
+  config.vm.provision "shell", inline: <<-SHELL
+     echo 'deb http://apt.postgresql.org/pub/repos/apt/ trusty-pgdg main 9.5' | sudo tee --append /etc/apt/sources.list.d/postgresql.list
+     wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo apt-key add -
+     sudo apt-get update
+     apt-get install -y postgresql-9.5 git
+     sudo -u postgres psql -c "ALTER USER postgres WITH PASSWORD 'postgres';"
+  SHELL
 end

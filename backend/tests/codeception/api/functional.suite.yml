@@ -1,0 +1,22 @@
+# Codeception Test Suite Configuration
+
+# suite for functional (integration) tests.
+# emulate web requests and make application process them.
+# (tip: better to use with frameworks).
+
+# RUN `build` COMMAND AFTER ADDING/REMOVING MODULES.
+#basic/web/index.php
+class_name: FunctionalTester
+modules:
+    enabled:
+      - Filesystem
+      - Yii2
+      - tests\codeception\common\_support\FixtureHelper
+      - tests\codeception\api\_support\MixHelper
+      - REST:
+          url: http://api.billing.local/
+          timeout: 90
+          depends: Yii2
+    config:
+        Yii2:
+            configFile: '../config/api/functional.php'
