@@ -13,6 +13,7 @@ export function* watchServices () {
         yield take((action)=>{
             return action.type == PAGE_ACTIVATE && action.payload.name == 'services';
         });
+        yield put(getTree());
         while (true) {
             const result = yield take([
                 PAGE_ACTIVATE,

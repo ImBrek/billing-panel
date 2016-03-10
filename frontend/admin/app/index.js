@@ -7,8 +7,6 @@ import { browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
 import 'babel-polyfill'
 
-import {login} from 'actions/tokens';
-
 const store = configureStore();
 const history = syncHistoryWithStore(browserHistory, store);
 

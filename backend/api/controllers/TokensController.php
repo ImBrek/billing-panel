@@ -9,6 +9,28 @@ use yii\web\UnauthorizedHttpException;
 
 class TokensController extends Controller {
 
+	public function behaviors() {
+		$result                   = parent::behaviors();
+		$result['corsFilter']     = [
+			'class' => \yii\filters\Cors::className(),
+			'cors'  => [
+				'Origin'                         => [ '*' ],
+				'Access-Control-Request-Method'  => [ 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ],
+				'Access-Control-Request-Headers' => [ '*' ],
+			],
+
+		];
+//		$result['_authenticator'] = [
+//			'class'       => CompositeAuth::className(),
+//			'authMethods' => [
+//				HttpBearerAuth::className(),
+//				QueryParamAuth::className()
+//			]
+//		];
+
+		return $result;
+	}
+
 	public function getUser() {
 		$params = \Yii::$app->getRequest()->getBodyParams();
 
@@ -16,7 +38,7 @@ class TokensController extends Controller {
 			return User::findIdentityByRefreshToken( $params['refresh_token'] );
 		} else if ( ! ( empty( $params['username'] ) && empty( $params['password'] ) ) ) {
 			$user = User::findByUsername( $params['username'] );
-			if ( $user->validatePassword( $params['password'] ) ) {
+			if ( $user && $user->validatePassword( $params['password'] ) ) {
 				return $user;
 			}
 		}
@@ -50,8 +72,11 @@ class TokensController extends Controller {
 
 	public function actionDelete() {
 		\Yii::$app->user->logout();
+		\Yii::$app->getResponse()->setStatusCode( 204 );
+	}
 
-		return true;
+	public function actionOptions(){
+
 	}
 
 }

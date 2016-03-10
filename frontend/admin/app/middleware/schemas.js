@@ -1,6 +1,6 @@
 import {Schema, arrayOf, normalize} from 'normalizr';
 
-const token = new Schema('tokens', {idAttribute: 'key'});
+const token = new Schema('tokens', {idAttribute: 'userId'});
 
 const stCategory = new Schema('stCategories');
 const stService = new Schema('stServices');

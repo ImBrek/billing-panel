@@ -5,6 +5,7 @@ import * as serviceDialogs from './dialogs/service'
 import * as addtServiceDialogs from './dialogs/addtService'
 import watchEntities from './entities'
 import * as pageServices from './pages/services'
+import * as auth from './auth'
 
 export default function* root () {
     yield [
@@ -15,6 +16,7 @@ export default function* root () {
         fork(addtServiceDialogs.watchUpdate),
         fork(addtServiceDialogs.watchDelete),
         fork(watchEntities),
-        fork(pageServices.watchServices)
+        fork(pageServices.watchServices),
+        fork(auth.watchAuth)
     ];
 }

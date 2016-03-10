@@ -1,4 +1,4 @@
-import {TOKEN_REQUEST,TOKEN_FAILURE,TOKEN_SUCCESS} from 'actions/tokens';
+import {TOKEN_REQUEST,TOKEN_FAILURE,TOKEN_SUCCESS} from 'actions/token';
 
 const initialState = {};
 

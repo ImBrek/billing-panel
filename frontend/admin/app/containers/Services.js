@@ -41,7 +41,6 @@ class Services extends Component {
 
     componentWillMount() {
         this.props.pageActivate();
-        this.refreshServicesTree();
     }
 
     render() {
