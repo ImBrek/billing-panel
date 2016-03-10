@@ -106,8 +106,8 @@ class IndexAction extends \yii\rest\IndexAction {
 			$showDeleted = false;
 		}
 
-		if ( ! $showDeleted && isset( $schema->getTableSchema( $modelClass::tableName() )->columns['isDeleted'] ) ) {
-			$this->query->andWhere( [ $modelClass::tableName() . '.isDeleted' => false ] );
+		if ( ! $showDeleted && isset( $schema->getTableSchema( $modelClass::tableName() )->columns['is_deleted'] ) ) {
+			$this->query->andWhere( [ $modelClass::tableName() . '.is_deleted' => false ] );
 		}
 
 	}
@@ -169,17 +169,18 @@ class IndexAction extends \yii\rest\IndexAction {
 			$expandResult[] = $key;
 			$this->query->$method( [
 				$key => function ( $query ) use ( $result, $showDeleted,$schema ) {
-					if ( isset( $result['filter'] ) ) {
-						$queryBuilder = new ApiQueryBuilder( \Yii::$app->db,$query );
-						$queryBuilder->attachCondition($result['filter'],$query->params);
-
-					}
-
-					if ( isset( $result['sort'] ) ) {
-						foreach ( (array) $result['sort'] as $fieldName => $direction ) {
-							$query->addOrderBy( [ $fieldName => $direction == 'desc' ? SORT_DESC : SORT_ASC ] );
-						}
-					}
+					$query->andWhere(['is_deleted'=>false]);
+//					if ( isset( $result['filter'] ) ) {
+//						$queryBuilder = new ApiQueryBuilder( \Yii::$app->db,$query );
+//						$queryBuilder->attachCondition($result['filter'],$query->params);
+//
+//					}
+//
+//					if ( isset( $result['sort'] ) ) {
+//						foreach ( (array) $result['sort'] as $fieldName => $direction ) {
+//							$query->addOrderBy( [ $fieldName => $direction == 'desc' ? SORT_DESC : SORT_ASC ] );
+//						}
+//					}
 				}
 			] );
 		}

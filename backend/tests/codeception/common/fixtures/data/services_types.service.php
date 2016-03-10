@@ -9,7 +9,6 @@ return [
 	'1'=>[
 		'title'       => 'Platform 1',
 		'description' => 'Platform 1',
-		'type'        => 0,
 		'cost'        => 1000,
 		'category_id' => 1,
 		'parent_id'   => null
@@ -17,7 +16,6 @@ return [
 	'2'=>[
 		'title'       => 'Platform 2',
 		'description' => 'Platform 2',
-		'type'        => 0,
 		'cost'        => 2000,
 		'category_id' => 1,
 		'parent_id'   => null
@@ -25,7 +23,6 @@ return [
 	'3'=>[
 		'title'       => 'Platform 3',
 		'description' => 'Platform 3',
-		'type'        => 0,
 		'cost'        => 3000,
 		'category_id' => 2,
 		'parent_id'   => null

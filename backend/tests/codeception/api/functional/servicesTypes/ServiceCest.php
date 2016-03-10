@@ -64,7 +64,7 @@ class ServiceCest {
 			'title'       => 'test_new_super',
 			'type'        => Service::TYPE_SELECT,
 			'cost'        => 1000,
-			'category_id' => 1,
+			'parent_id' => 1,
 			'options'     => [
 				[
 					'title' => 'Option1',

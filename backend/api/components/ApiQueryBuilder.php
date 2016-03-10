@@ -40,10 +40,8 @@ class ApiQueryBuilder extends QueryBuilder {
 //		'>='          => 'buildComparisonCondition',
 //		'<='          => 'buildComparisonCondition',
 //		'<'           => 'buildComparisonCondition',
-		'SPHINX'     => 'buildSphinxCondition',
-		'PRIVOBJECT' => 'privObjectCondition',
-		'ACTION'     => 'actionCondition',
-		'CLASS'      => 'classCondition'
+//		'ACTION'     => 'actionCondition',
+//		'CLASS'      => 'classCondition'
 	];
 
 	public function buildCondition( $condition, &$params ) {

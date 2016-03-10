@@ -5,12 +5,10 @@ import { Modal} from 'react-bootstrap'
 import  classnames  from 'classnames'
 
 import {hideDialog} from 'actions/dialogs'
-import {createService,updateService} from 'actions/services'
-import {getServicesTree} from 'actions/categories'
+import {createService,updateService} from 'actions/service'
 
 class Update extends Component {
     static propTypes = {
-        getServicesTree: PropTypes.func.isRequired,
         hideDialog: PropTypes.func.isRequired,
         createService: PropTypes.func.isRequired,
         updateService: PropTypes.func.isRequired
@@ -24,14 +22,9 @@ class Update extends Component {
 
     save(data) {
         if (this.props.dialog.id){
-            this.props.updateService(this.props.dialog.id,data).then(() =>{
-                this.props.hideDialog();
-            })
+            this.props.updateService(this.props.dialog.id,data);
         } else {
-            this.props.createService({...data, category: this.props.dialog.categoryId}).then(()=> {
-                this.props.getServicesTree();
-                this.props.hideDialog();
-            })
+            this.props.createService(this.props.dialog.categoryId,data)
 
         }
     }
@@ -89,7 +82,6 @@ export default reduxForm({
             initialValues:state.entities.stServices[state.dialog.id]
         }
     }, {
-        getServicesTree,
         createService,
         updateService,
         hideDialog

@@ -5,6 +5,7 @@ import configureStore from 'store/configureStore';
 import {Provider} from 'react-redux';
 import { browserHistory } from 'react-router'
 import { syncHistoryWithStore } from 'react-router-redux'
+import 'babel-polyfill'
 
 import {login} from 'actions/tokens';
 

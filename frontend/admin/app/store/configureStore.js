@@ -1,17 +1,16 @@
-import { createStore,applyMiddleware,compose } from 'redux';
-import rootReducer from 'reducers';
-import apiExt from 'middleware/apiExt';
+import {createStore, applyMiddleware, compose} from 'redux';
 import {apiMiddleware} from 'redux-api-middleware';
-import promiseMiddleware from 'redux-promise';
-
+import createSagaMiddleware from 'redux-saga'
 import createLogger from 'redux-logger';
-import thunk from 'redux-thunk';
 
-export default function configureStore() {
+import rootReducer from 'reducers';
+import rootSaga from 'sagas';
+
+export default function configureStore () {
     const logger = createLogger();
 
     const finalCreateStore = compose(
-        applyMiddleware(thunk,apiExt,apiMiddleware, logger),
+        applyMiddleware(createSagaMiddleware(rootSaga), logger),
         window.devToolsExtension ? window.devToolsExtension() : f => f
     )(createStore);
 

@@ -48,14 +48,23 @@ class Service extends ActiveRecordExt {
 		return [
 			[ [ 'title', 'description' ], 'string', 'max' => 255 ],
 			[ [ 'cost' ], 'integer', 'min' => 0 ],
-			[ [ 'type', 'title', 'cost' ], 'required' ],
+			[ [ 'title', 'cost' ], 'required' ],
 			[ [ 'type' ], 'in', 'range' => [ self::TYPE_INPUT, self::TYPE_SELECT ] ],
+			[ [ 'type' ], 'required', 'when' => function ( $model ) {
+				return $model->parent_id;
+			} ],
 			[
 				[ 'category_id' ],
-				function ( $attribute, $params ) {
-					if (!($this->category_id || $this->parent_id)){
-						$this->addError('category_id','category_id or parent_id must be set');
-					}
+				'required',
+				'when' => function ( $model ) {
+					return ! $model->parent_id;
+				}
+			],
+			[
+				[ 'parent_id' ],
+				'required',
+				'when' => function ( $model ) {
+					return ! $model->category_id;
 				}
 			]
 		];

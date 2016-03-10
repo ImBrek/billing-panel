@@ -5,10 +5,27 @@ import { map } from 'lodash/collection'
 import classNames from 'classnames'
 
 import NavBar from 'containers/NavBar'
-import {getServicesTree} from 'actions/categories'
+import {getTree} from 'actions/pages/services'
 import {selectEntity} from 'actions/entities'
-import {serviceUpdateShow,serviceCreateShow,optionUpdateShow,optionCreateShow} from 'actions/dialogs'
-import {pageActivate} from 'actions/pages'
+import {
+    categoryUpdateShow,
+    categoryCreateShow,
+    categoryDeleteShow,
+} from 'actions/dialogs/category'
+
+import {
+    serviceUpdateShow,
+    serviceCreateShow,
+    serviceDeleteShow,
+} from 'actions/dialogs/service'
+
+import {
+    addtServiceUpdateShow,
+    addtServiceCreateShow,
+    addtServiceDeleteShow,
+} from 'actions/dialogs/addtService'
+
+import {pageActivate} from 'actions/pages/index'
 //import ServicesTree from 'components/ServicesTree'
 
 class Services extends Component {
@@ -19,7 +36,7 @@ class Services extends Component {
     }
 
     refreshServicesTree() {
-        this.props.getServicesTree()
+        this.props.getTree()
     }
 
     componentWillMount() {
@@ -33,30 +50,67 @@ class Services extends Component {
                 <NavBar />
                 <div className="services-page">
                     <div className="control-panel">
-                        <button
-                            title="Edit selected service"
-                            className={classNames('fa','fa-edit','fa-2x',{hide:this.props.page.selectedEntity.type != 'stServices'})}
-                            onClick={()=>{this.props.serviceUpdateShow(this.props.page.selectedEntity.id)}}>
+                        <button className="show"
+                            title="Create new category"
+                            onClick={this.props.categoryCreateShow}>
+                            <i className="fa fa-plus fa-2x"></i>
                         </button>
+                        <button
+                            title="Edit selected category"
+                            className={classNames({show:this.props.page.selectedEntity._type == 'stCategories'})}
+                            onClick={()=>{this.props.categoryUpdateShow(this.props.page.selectedEntity.id)}}>
+                            <i className="fa fa-edit fa-2x"></i>
+                        </button>
+                        <button
+                            title="Delete selected category"
+                            className={classNames({show:this.props.page.selectedEntity._type == 'stCategories'})}
+                            onClick={()=>{this.props.categoryDeleteShow(this.props.page.selectedEntity.id)}}>
+                            <i className="fa fa-trash fa-2x"></i>
+                        </button>
+
                         <button
                             title="Create new service"
-                            className={classNames('fa','fa-plus','fa-2x',{hide:(this.props.page.selectedEntity.type != 'stCategories')})}
+                            className={classNames({show:this.props.page.selectedEntity._type == 'stCategories'})}
                             onClick={()=>{this.props.serviceCreateShow(this.props.page.selectedEntity.id)}}>
+                            <i className="fa fa-plus fa-2x"></i>
                         </button>
                         <button
-                            title="Edit selected option"
-                            className={classNames('fa','fa-edit','fa-2x',{hide:this.props.page.selectedEntity.type != 'stOptions'})}
-                            onClick={()=>{this.props.optionUpdateShow(this.props.page.selectedEntity.id)}}>
+                            title="Edit selected service"
+                            className={classNames({show:this.props.page.selectedEntity._type == 'stServices' && this.props.page.selectedEntity.categoryId})}
+                            onClick={()=>{this.props.serviceUpdateShow(this.props.page.selectedEntity.id)}}>
+                            <i className="fa fa-edit fa-2x"></i>
                         </button>
                         <button
-                            title="Create new option"
-                            className={classNames('fa','fa-plus','fa-2x',{hide:(this.props.page.selectedEntity.type != 'stServices')})}
-                            onClick={()=>{this.props.optionCreateShow(this.props.page.selectedEntity.id)}}>
+                            title="Delete selected service"
+                            className={classNames({show:this.props.page.selectedEntity._type == 'stServices' && this.props.page.selectedEntity.categoryId})}
+                            onClick={()=>{this.props.serviceDeleteShow(this.props.page.selectedEntity.id)}}>
+                            <i className="fa fa-trash fa-2x"></i>
                         </button>
+
+                        <button
+                            title="Create new additional service"
+                            className={classNames({show:this.props.page.selectedEntity._type == 'stServices' && this.props.page.selectedEntity.categoryId})}
+                            onClick={()=>{this.props.addtServiceCreateShow(this.props.page.selectedEntity.id)}}>
+                            <i className="fa fa-plus fa-2x"></i>
+                        </button>
+                        <button
+                            title="Edit selected additional service"
+                            className={classNames({show:this.props.page.selectedEntity._type == 'stServices' && this.props.page.selectedEntity.parentId})}
+                            onClick={()=>{this.props.addtServiceUpdateShow(this.props.page.selectedEntity.id)}}>
+                            <i className="fa fa-edit fa-2x"></i>
+                        </button>
+                        <button
+                            title="Delete selected additional service"
+                            className={classNames({show:this.props.page.selectedEntity._type == 'stServices' && this.props.page.selectedEntity.parentId})}
+                            onClick={()=>{this.props.serviceDeleteShow(this.props.page.selectedEntity.id)}}>
+                            <i className="fa fa-trash fa-2x"></i>
+                        </button>
+
                         <button
                             title="Refresh"
-                            className={classNames('fa','fa-refresh','fa-2x',{'fa-spin': this.props.page.isFetching})}
+                            className="show"
                             onClick={this.refreshServicesTree}>
+                            <i className={classNames('fa','fa-refresh','fa-2x',{'fa-spin': this.props.page.isFetching})}></i>
                         </button>
                     </div>
                     <div className="content">
@@ -79,37 +133,42 @@ export const selector = createSelector(
     state => state.entities.stCategories,
     state => state.entities.stServices,
     state => state.entities.stOptions,
-    state => state.entities.stValues,
-    (page, categories, services, options, values) => {
+    (page, categories, services, options) => {
         return {
             page,
             //Get servicesTree from entities
-            servicesTree: map(categories, (category)=> {
-                return Object.assign({}, category, {
-                    services: category.services.map(id=> {
+            servicesTree: map(page.categories, (categoryId)=> {
+                return Object.assign({}, categories[categoryId], {
+                    services: categories[categoryId].services.map(id=> {
                         return Object.assign({}, services[id], {
-                            options: services[id].options.map(id=> {
-                                return Object.assign({}, options[id], {
-                                    values: options[id].values.map(id=>values[id])
+                            descendants: services[id].descendants.map(id=> {
+                                return Object.assign({}, services[id], {
+                                    options: services[id].options.map(id=>options[id])
                                 })
                             })
                         })
                     })
                 });
-
-                return category
             })
         }
     }
 );
 
 export default connect(selector, {
-    getServicesTree,
+    getTree,
     serviceCreateShow,
     serviceUpdateShow,
-    optionCreateShow,
-    optionUpdateShow,
-    pageActivate,
+    serviceDeleteShow,
+
+    categoryCreateShow,
+    categoryUpdateShow,
+    categoryDeleteShow,
+
+    addtServiceUpdateShow,
+    addtServiceCreateShow,
+    addtServiceDeleteShow,
+
+    pageActivate:()=>pageActivate('services'),
     selectEntity
 })(Services)
 
@@ -120,9 +179,9 @@ class ServicesTree extends Component {
 
     renderCategory(category) {
         return <tr
-            className={classNames("level-0",{info:this.props.selectedEntity.id == category.id && this.props.selectedEntity.type=='stCategories'})}
+            className={classNames("level-0",{info:this.props.selectedEntity.id == category.id && this.props.selectedEntity._type=='stCategories'})}
             key={'c'+category.id}
-            onClick={()=>{this.props.selectEntity(category.id,'stCategories')}}>
+            onClick={()=>{this.props.selectEntity(category,'stCategories')}}>
             <td>
                 <i className="fa fa-minus expand-control"></i>
                 <span className="intend"> {category.title}</span>
@@ -134,9 +193,9 @@ class ServicesTree extends Component {
 
     renderService(service) {
         return <tr
-            className={classNames("level-1",{info:this.props.selectedEntity.id == service.id && this.props.selectedEntity.type=='stServices'})}
+            className={classNames("level-1",{info:this.props.selectedEntity.id == service.id && this.props.selectedEntity._type=='stServices'})}
             key={'s'+service.id}
-            onClick={()=>{this.props.selectEntity(service.id,'stServices')}}>
+            onClick={()=>{this.props.selectEntity(service,'stServices')}}>
             <td>
                 <i className="fa fa-minus expand-control"></i>
                 <span className="intend"> {service.title}</span>
@@ -146,11 +205,11 @@ class ServicesTree extends Component {
         </tr>
     }
 
-    renderOption(option) {
+    renderDescendantService(option) {
         return <tr
-            className={classNames("level-2",{info:this.props.selectedEntity.id == option.id && this.props.selectedEntity.type=='stOptions'})}
-            key={'o'+option.id}
-            onClick={()=>{this.props.selectEntity(option.id,'stOptions')}}>
+            className={classNames("level-2",{info:this.props.selectedEntity.id == option.id && this.props.selectedEntity._type=='stServices'})}
+            key={'s'+option.id}
+            onClick={()=>{this.props.selectEntity(option,'stServices')}}>
             <td>
                 <i className="fa fa-minus expand-control"></i>
                 <span className="intend"> {option.title}</span>
@@ -160,7 +219,7 @@ class ServicesTree extends Component {
         </tr>
     }
 
-    renderValue(value) {
+    renderOption(value) {
         return <tr className="level-3" key={'v'+value.id}>
             <td>
                 <i className="fa fa-minus expand-control"></i>
@@ -177,11 +236,11 @@ class ServicesTree extends Component {
             table.push(this.renderCategory(category))
             category.services.forEach((service)=> {
                 table.push(this.renderService(service))
-                service.options.forEach((option)=> {
-                    table.push(this.renderOption(option))
-                    option.values.forEach((value)=> {
+                service.descendants.forEach((option)=> {
+                    table.push(this.renderDescendantService(option))
+                    option.options.forEach((value)=> {
                         if (option.type === 1) {
-                            table.push(this.renderValue(value))
+                            table.push(this.renderOption(value))
                         }
                     })
                 })

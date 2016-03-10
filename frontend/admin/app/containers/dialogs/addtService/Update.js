@@ -1,64 +1,62 @@
-import React, { Component, PropTypes } from 'react'
-import { connect } from 'react-redux'
-import { createSelector } from 'reselect'
-import { Modal} from 'react-bootstrap'
+import React, {Component, PropTypes} from 'react'
+import {connect} from 'react-redux'
+import {createSelector} from 'reselect'
+import {Modal} from 'react-bootstrap'
 import  classnames  from 'classnames'
 import {reduxForm} from 'redux-form';
 import {change} from 'redux-form';
+
 import {hideDialog} from 'actions/dialogs'
-import {createOption} from 'actions/options'
-import {updateOption} from 'actions/options'
-import {getServicesTree} from 'actions/categories'
+import {createAddtService, updateAddtService} from 'actions/addtService'
+
 
 class Update extends Component {
-    constructor(props) {
+    constructor (props) {
         super(props)
         this.save = this.save.bind(this);
     }
 
-    save(data) {
+    save (data) {
         if (this.props.dialog.id) {
-            this.props.updateOption(this.props.dialog.id, data).then((data) => {
-                console.log('Тут что то',data);
-                //this.props.hideDialog();
-            })
+            this.props.updateAddtService(this.props.dialog.id, data);
         } else {
             if (data.type == 0) {
-                delete data.values
+                delete data.options
             }
-            this.props.createOption({...data, service: this.props.dialog.serviceId}).then((data,data1)=> {
-                console.log('Тут что то',data,data1);
-                //this.props.getServicesTree();
-                //this.props.hideDialog();
-            })
-
+            this.props.createAddtService(this.props.dialog.parentId, data);
         }
     }
 
-    render() {
-        const {fields: {title,cost,values,type},handleSubmit,submitting,invalid} = this.props;
+    render () {
+        const {fields: {title, cost, options, type}, handleSubmit, submitting, invalid} = this.props;
         const spinner = this.props.dialog.isFetching ? <i className="fa fa-spin fa-spinner"></i> : '';
 
-        let valuesBlock = '';
-        if (type.value == 1) valuesBlock = values.map((val, index) =>
-            <div className={classnames("form-group",{"has-error":val.cost.error || val.title.error})} key={index}>
-                <label className="col-sm-2 control-label">Value {index + 1}</label>
-                <div className="col-sm-4"><input type="text" className="form-control" {...val.title}/></div>
-                <div className="col-sm-3"><input type="number" step="any" min="0"
-                                                 className="form-control" {...val.cost}/></div>
-                <div className="col-sm-3 btn-toolbar">
-                    <button type="button"
-                            className={classnames("btn btn-default",{hide:values.length==1})}
-                            onClick={()=>values.removeField(index)}><i className="fa fa-trash"></i></button>
-                    <button type="button"
-                            className={classnames("btn btn-default",{hide:index!=values.length-1})}
-                            onClick={()=>values.addField()}><i className="fa fa-plus"></i></button>
-                    <button type="button"
-                            className={classnames("btn btn-default")}
-                            onClick={()=>this.props.updateField(val._deleted.name,!val._deleted.value)}>111
-                    </button>
+        let optionsBlock = '';
+        if (type.value == 1) optionsBlock = options.map((val, index) => {
+                const label = val.isDeleted.value === true ? <s>Value {index + 1}</s> : <span>Value {index + 1}</span>;
+                return <div className={classnames("form-group",{"has-error":val.cost.error || val.title.error})}
+                            key={index}>
+                    <label className="col-sm-2 control-label">
+                        {label}
+                    </label>
+                    <div className="col-sm-4"><input type="text" className="form-control" {...val.title}/></div>
+                    <div className="col-sm-3"><input type="number" step="any" min="0"
+                                                     className="form-control" {...val.cost}/></div>
+                    <div className="col-sm-3 btn-toolbar">
+                        <button type="button"
+                                className={classnames("btn btn-default",{hide:options.length==1 || val.id.value})}
+                                onClick={()=>options.removeField(index)}><i className="fa fa-trash"></i></button>
+                        <button type="button"
+                                className={classnames("btn btn-default",{hide:!val.id.value})}
+                                onClick={()=>this.props.updateField(val.isDeleted.name,!val.isDeleted.value)}>
+                            <i className="fa fa-trash"></i>
+                        </button>
+                        <button type="button"
+                                className={classnames("btn btn-default",{hide:index!=options.length-1})}
+                                onClick={()=>options.addField()}><i className="fa fa-plus"></i></button>
+                    </div>
                 </div>
-            </div>
+            }
         )
 
         return (
@@ -98,7 +96,7 @@ class Update extends Component {
                             </div>
                         </div>
 
-                        {valuesBlock}
+                        {optionsBlock}
                     </form>
                 </Modal.Body>
                 <Modal.Footer>
@@ -110,44 +108,48 @@ class Update extends Component {
     }
 }
 
-function validate(data) {
+function validate (data) {
     const errors = {};
     if (!data.title) errors.title = 'Required';
     if (!data.type) errors.type = 'Required';
-    errors.values = [];
-    for (let i = 0,len = data.values.length; i < len; i++) {
-        errors.values.push({})
-        if (!data.values[i].title) errors.values[i].title = 'Required'
-        if (data.values[i].cost === undefined) errors.values[i].cost = 'Required'
+    if (data.type == 1) {
+        errors.options = [];
+        for (let i = 0, len = data.options.length; i < len; i++) {
+            errors.options.push({})
+            if (!data.options[i].title) errors.options[i].title = 'Required'
+            if (data.options[i].cost === undefined) errors.options[i].cost = 'Required'
+        }
     }
+    console.log(data, errors);
     return errors;
 }
 
 export default reduxForm({
         form: 'updateOption',
         fields: [
+            'id',
             'title',
             'cost',
             'type',
-            'values[].id',
-            'values[].title',
-            'values[]._deleted',
-            'values[].cost'],
+            'options[].id',
+            'options[].title',
+            'options[].isDeleted',
+            'options[].cost'],
         validate
     },
     (state)=> {
         let initialValues;
         if (state.dialog.id) {
             initialValues = Object.assign({},
-                state.entities.stOptions[state.dialog.id],
+                state.entities.stServices[state.dialog.id],
                 {
-                    values: state.entities.stOptions[state.dialog.id].values.map(id=>state.entities.stValues[id])
+                    options: state.entities.stServices[state.dialog.id].options.map(id=>state.entities.stOptions[id])
                 }
             )
         } else {
             initialValues = {
-                values: [
-                    {title: '', cost: 0}
+                options: [
+                    {title: '', cost: 0, isDeleted: false}
                 ]
             };
         }
@@ -156,9 +158,8 @@ export default reduxForm({
             initialValues
         }
     }, {
-        getServicesTree,
-        createOption,
-        updateOption,
+        createAddtService,
+        updateAddtService,
         hideDialog,
         updateField: (field, value)=> {
             return change('updateOption', field, value)

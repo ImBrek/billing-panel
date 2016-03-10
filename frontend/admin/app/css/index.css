@@ -13,11 +13,13 @@
     display: block;
     padding: 0 0.5rem; }
     .services-page .control-panel button {
+      display: none;
       float: left;
-      padding-top: 3px;
       margin-bottom: 10px;
       border: 1px solid gray;
-      border-radius: 4px; }
+      border-radius: 4px;
+      width: 40px;
+      height: 40px; }
   .services-page .content {
     width: 100%; }
 

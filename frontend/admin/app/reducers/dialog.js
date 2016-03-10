@@ -1,15 +1,16 @@
-import {SERVICE_UPDATE_SHOW,DIALOG_HIDE,OPTION_UPDATE_SHOW} from 'actions/dialogs';
+import {DIALOG_TYPE,DIALOG_HIDE} from 'actions/dialogs/index'
 
-export default function token(state = {}, action) {
-    switch (action.type) {
-        case SERVICE_UPDATE_SHOW:
-            return {...action.payload, type: 'serviceUpdate'}
-        case OPTION_UPDATE_SHOW:
-            return {...action.payload, type: 'optionUpdate'}
-        case DIALOG_HIDE:
-            return {};
-            break;
-        default:
-            return state
+export default function token (state = {}, action) {
+    if (action.payload && action.payload[DIALOG_TYPE]) {
+        const type = action.payload[DIALOG_TYPE];
+        delete action.payload[DIALOG_TYPE];
+        return {
+            ...action.payload,
+            type
+        }
     }
+    if ( action.type == DIALOG_HIDE)
+        return {};
+    
+    return state
 }

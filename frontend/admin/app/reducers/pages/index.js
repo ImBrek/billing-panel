@@ -1,7 +1,7 @@
 import { combineReducers } from 'redux';
 import login from './login';
 import services from './services';
-import {PAGE_ACTIVATE} from 'actions/pages';
+import {PAGE_ACTIVATE} from 'actions/pages/index';
 
 const activeReducers = {
     login,

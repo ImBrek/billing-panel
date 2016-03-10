@@ -1,17 +1,18 @@
 import {get} from 'lodash/object'
 import merge from 'lodash/merge'
+// import mergeWith from 'lodash/mergeWith'
 
 const initValue = {
     tokens: {},
     stCategories:{},
     stServices:{},
     stOptions:{},
-    stValues:{}
 }
 
 export default function entities(state = initValue, action) {
-    if (action.meta && action.meta.normalizr){
-        return merge({}, state, action.payload.entities)
+    const entities = get(action,'payload.response.entities');
+    if (entities){
+        return merge({},state, entities)
     }
 
     return state;

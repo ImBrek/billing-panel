@@ -16,7 +16,7 @@ class m160304_202236_services_types extends Migration {
 			'id'          => 'serial4 PRIMARY KEY',
 			'title'       => 'varchar(255) NOT NULL',
 			'description' => 'varchar(255)',
-			'type'        => 'int2 DEFAULT 0',
+			'type'        => 'int2 DEFAULT NULL',
 			'cost'        => 'real CHECK (cost>=0)',
 			'category_id' => 'int4 REFERENCES services_types.category ON DELETE CASCADE ON UPDATE CASCADE ',
 			'is_deleted'  => 'boolean DEFAULT false',

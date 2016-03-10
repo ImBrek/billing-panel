@@ -1,10 +1,10 @@
-import { createAction } from 'redux-actions';
+import {createAction} from 'redux-actions';
 
 export const ENTITY_SELECT = 'ENTITY_SELECT'
 
-export const selectEntity = createAction(ENTITY_SELECT, (id, type)=> {
+export const selectEntity = createAction(ENTITY_SELECT, (entity, type)=> {
     return {
-        id,
-        type
+        ...entity,
+        _type: type
     }
 })

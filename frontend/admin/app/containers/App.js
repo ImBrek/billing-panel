@@ -4,6 +4,7 @@ import { browserHistory } from 'react-router'
 import { createSelector } from 'reselect';
 
 import DialogsManager from 'components/DialogsManager'
+import Login from './Login'
 
 class App extends Component {
     constructor(props) {
@@ -33,6 +34,14 @@ export const selector = createSelector(
         }
     }
 );
+
+// return (
+//     <div>
+//         {children}
+//         <DialogsManager dialog={this.props.dialog}/>
+//     </div>
+// )
+
 
 
 export default connect(selector, {})(App)
