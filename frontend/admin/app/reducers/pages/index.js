@@ -1,23 +1,34 @@
-import { combineReducers } from 'redux';
+import {combineReducers} from 'redux';
 import login from './login';
 import services from './services';
+import orders from './orders';
 import {PAGE_ACTIVATE} from 'actions/pages/index';
 
 const activeReducers = {
     login,
-    services
+    services,
+    orders
 };
 
 export default function (state, action) {
+
     if (state === undefined) {
         const newState = {
-            activePage: 'services'
+            activePage: 'aaaa'
         }
         for (const name in activeReducers) {
             newState[name] = activeReducers[name](undefined, action);
         }
         return newState;
     }
+
+    if (action.type == PAGE_ACTIVATE){
+        const newState = {
+            activePage: action.payload.name
+        }
+        return newState;
+    }
+
     if (state.activePage) {
         const newState = {
             activePage: state.activePage
@@ -26,9 +37,8 @@ export default function (state, action) {
             newState[name] = (name == state.activePage) ? activeReducers[name](state[name], action) : state[name]
         }
         return newState
-
     }
 
-    return state
+    return state;
 }
 
