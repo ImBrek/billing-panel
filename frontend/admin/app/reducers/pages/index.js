@@ -23,9 +23,9 @@ export default function (state, action) {
     }
 
     if (action.type == PAGE_ACTIVATE){
-        const newState = {
+        const newState = Object.assign({},state,{
             activePage: action.payload.name
-        }
+        })
         return newState;
     }
 

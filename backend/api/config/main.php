@@ -40,6 +40,11 @@ return [
 					'controller'      => ['tokens'],
 //					'nestedResources' => ['services' ],
 				],
+				[
+					'class'           => 'api\components\UrlRule',
+					'controller'      => ['orders/orders'=>'orders/orders'],
+//					'nestedResources' => ['services' ],
+				],
 			],
 		],
 		'request'      => [

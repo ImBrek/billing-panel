@@ -9,4 +9,8 @@ use yii\test\ActiveFixture;
  */
 class OptionFixture extends ActiveFixture {
 	public $modelClass = 'common\models\servicesTypes\Option';
+	public $depends = [
+		'tests\codeception\common\fixtures\ServiceFixture'
+	];
+
 }

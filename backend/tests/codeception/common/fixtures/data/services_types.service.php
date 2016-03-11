@@ -49,6 +49,6 @@ return [
 		'type'        => 0,
 		'cost'        => 4000,
 		'category_id' => null,
-		'parent_id'   => 2
+		'parent_id'   => 1
 	],
 ];
