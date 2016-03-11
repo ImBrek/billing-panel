@@ -60,10 +60,13 @@ export default function (options) {
                 return Promise.reject(json)
             }
             const camelizedJson = camelizeKeys(json);
-
-            return Object.assign({},
-                normalize(camelizedJson, schema),
-            )
+            if (schema){
+                return Object.assign({},
+                    normalize(camelizedJson, schema),
+                )
+            } else {
+                return camelizedJson;
+            }
         })
         .then(
             response => ({response}),

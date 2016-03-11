@@ -67,8 +67,6 @@ class OptionTest extends DbTestCase {
 	 */
 	public function fixtures() {
 		return [
-			'category' => CategoryFixture::className(),
-			'service'  => ServiceFixture::className(),
 			'option'   => OptionFixture::className()
 		];
 	}

@@ -1,7 +1,10 @@
 import React, {Component, PropTypes} from 'react';
 import {reduxForm} from 'redux-form';
-export const fields = ['email', 'jabber', 'name', 'customerType', 'username', 'password'];
 import  classnames  from 'classnames'
+import {createToken} from 'actions/token'
+import fetch, {API_READ, API_UPDATE, API_CREATE, API_DELETE} from 'services/api';
+
+export const fields = ['email', 'jabber', 'name', 'customerType', 'username', 'password'];
 
 const validate = values => {
     const errors = {};
@@ -9,7 +12,7 @@ const validate = values => {
         errors.email = 'Required';
     } else {
         var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-        if (!re.test(values.email)){
+        if (!re.test(values.email)) {
             errors.email = 'Email format';
         }
     }
@@ -28,8 +31,35 @@ const validate = values => {
     if (!values.customerType) {
         errors.customerType = 'Required';
     }
+    return {};
     return errors;
 };
+
+const asyncValidate = (values/*, dispatch */) => {
+    return fetch({
+        method: API_READ,
+        endpoint: 'users/check',
+        queryParams: {
+            username: values.username
+        }
+    }).then((data)=> {
+        if (data.error){
+            return;
+        } else {
+            return Promise.reject({username: 'That username is taken'});
+        }
+    });
+    // return new Promise((resolve, reject) => {
+    //     setTimeout(() => {
+    //         if (['john', 'paul', 'george', 'ringo'].includes(values.username)) {
+    //             reject({username: 'That username is taken'});
+    //         } else {
+    //             resolve();
+    //         }
+    //     }, 1000); // simulate server latency
+    // });
+};
+
 
 class Page2 extends Component {
     static propTypes = {
@@ -38,11 +68,23 @@ class Page2 extends Component {
         previousPage: PropTypes.func.isRequired
     };
 
+    save(data){
+        if (data.customerType == 0){
+            //new customer
+            this.props.createToken(data.username,data.password);
+        } else {
+            //exists
+            this.props.createToken(data.username,data.password);
+        }
+
+    }
+
     render () {
         const {
             fields: {email, jabber, name, customerType, username, password},
             handleSubmit,
-            previousPage
+            previousPage,
+            asyncValidating
         } = this.props;
 
         const newCustomerBlock = <div>
@@ -65,10 +107,14 @@ class Page2 extends Component {
                 </div>
             </div>
 
-            <div className={classnames("form-group",{"has-error":username.error})}>
+            <div className={classnames("form-group has-feedback",{"has-error":username.error})}>
                 <label className="col-sm-2 control-label">Username</label>
                 <div className="col-sm-9">
                     <input type="text" maxLength="255" className="form-control" {...username}/>
+                    <span
+                        className={classnames("fa fa-spin fa-spinner form-control-feedback hide",{show:asyncValidating === 'username'})}
+                        aria-hidden="true"></span>
+                    {username.error && username.error == 'That username is taken' && <span className="help-block">{username.error}</span>}
                 </div>
             </div>
             <div className={classnames("form-group",{"has-error":password.error})}>
@@ -94,23 +140,25 @@ class Page2 extends Component {
             </div>
         </div>;
 
-        return (<form onSubmit={handleSubmit} className="form-horizontal">
+        return (<form onSubmit={handleSubmit(this.save.bind(this))} className="form-horizontal">
                 <div className={classnames("form-group",{"has-error":customerType.error})}>
                     <label className="col-sm-2 control-label"></label>
                     <div className="col-sm-9">
-                        <div class="radio">
+                        <div className="radio">
                             <label>
-                                <input type="radio" {...customerType} value="0" checked={customerType.value === "0"}/> I'm new customer
+                                <input type="radio" {...customerType} value="0" checked={customerType.value === "0"}/>
+                                I'm new customer
                             </label>
                         </div>
-                        <div class="radio">
+                        <div className="radio">
                             <label>
-                                <input type="radio" {...customerType} value="1" checked={customerType.value === "1"}/> Sign in
+                                <input type="radio" {...customerType} value="1" checked={customerType.value === "1"}/>
+                                Sign in
                             </label>
                         </div>
                     </div>
                 </div>
-                {customerType.value ? (customerType.value == 0? newCustomerBlock : signInBlock):null}
+                {newCustomerBlock}
                 <div className="form-group">
                     <div className="col-sm-offset-2 col-sm-9">
                         <button type="button" onClick={previousPage} className="btn btn-primary">
@@ -127,8 +175,14 @@ class Page2 extends Component {
 }
 
 export default reduxForm({
-    form: 'wizard',              // <------ same form name
-    fields,                      // <------ only fields on this page
-    destroyOnUnmount: false,     // <------ preserve form data
-    validate                     // <------ only validates the fields on this page
+    form: 'create-order-user',
+    fields,
+    destroyOnUnmount: false,
+    validate,
+    asyncValidate,
+    asyncBlurFields: ['username'],
+},null,{
+    createToken
 })(Page2);
+
+// {customerType.value ? (customerType.value == 0? newCustomerBlock : signInBlock):null}

@@ -1,6 +1,7 @@
 <?php
 namespace common\models;
 
+use common\components\ActiveRecordExt;
 use Yii;
 use yii\base\NotSupportedException;
 use yii\behaviors\TimestampBehavior;
@@ -26,7 +27,7 @@ use yii\web\IdentityInterface;
  * @property string  $refresh_token
  * @property string  $refresh_token_expires
  */
-class User extends ActiveRecord implements IdentityInterface {
+class User extends ActiveRecordExt implements IdentityInterface {
 	const STATUS_DELETED = 0;
 	const STATUS_ACTIVE = 10;
 
@@ -53,7 +54,25 @@ class User extends ActiveRecord implements IdentityInterface {
 		return [
 			[ 'status', 'default', 'value' => self::STATUS_ACTIVE ],
 			[ 'status', 'in', 'range' => [ self::STATUS_ACTIVE, self::STATUS_DELETED ] ],
+			[ [ 'email', 'jabber' ], 'email' ],
+			[ [ 'jabber', 'name', 'username' ], 'required' ],
+			[ [ 'email', 'jabber', 'name', 'username' ], 'string', 'max' => 255 ],
 		];
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function scenarios() {
+		$scenarios = parent::scenarios();
+
+		$scenarios[ self::SCENARIO_UPDATE ][] = '! username';
+		$scenarios[ self::SCENARIO_UPDATE ][] = 'password';
+
+		$scenarios[ self::SCENARIO_CREATE ][] = '!status';
+		$scenarios[ self::SCENARIO_CREATE ][] = 'password';
+
+		return $scenarios;
 	}
 
 	/**
@@ -72,7 +91,7 @@ class User extends ActiveRecord implements IdentityInterface {
 			             'access_token' => $token,
 			             'status'       => self::STATUS_ACTIVE
 		             ] )
-		             ->andWhere( '[[access_token_expires]] >now()' )
+		             ->andWhere( '[[access_token_expires]] > now()' )
 		             ->one();
 	}
 
@@ -89,7 +108,7 @@ class User extends ActiveRecord implements IdentityInterface {
 			             'refresh_token' => $token,
 			             'status'        => self::STATUS_ACTIVE
 		             ] )
-		             ->andWhere( '[[refresh_token_expires]] > now()' )
+		             ->andWhere( '[[refresh_token_expires]]  > now()' )
 		             ->one();
 	}
 
@@ -135,7 +154,7 @@ class User extends ActiveRecord implements IdentityInterface {
 		}
 
 		$timestamp = (int) substr( $token, strrpos( $token, '_' ) + 1 );
-		$expire    = Yii::$app->params['user.passwordResetTokenExpire'];
+		$expire    = Yii::$app->params['user . passwordResetTokenExpire'];
 
 		return $timestamp + $expire >= time();
 	}
@@ -214,6 +233,38 @@ class User extends ActiveRecord implements IdentityInterface {
 			$this->access_token_expires  = new Expression( 'now() + interval \'1 day\' ' );
 			$this->refresh_token_expires = new Expression( 'now() + interval \'2 day\' ' );
 		}
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function beforeSave( $insert ) {
+		$result = parent::beforeSave( $insert );
+		if ( $result ) {
+			if ( $insert ) {
+				$this->generateAuthKey();
+			}
+
+			return true;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function fields() {
+		$fields = parent::fields();
+		unset( $fields['access_token'] );
+		unset( $fields['access_token_expires'] );
+		unset( $fields['refresh_token'] );
+		unset( $fields['refresh_token_expires'] );
+		unset( $fields['password_reset_token'] );
+		unset( $fields['auth_key'] );
+		unset( $fields['password_hash'] );
+
+		return $fields;
 	}
 
 }
