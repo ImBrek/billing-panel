@@ -41,8 +41,4 @@ export const selector = createSelector(
     }
 );
 
-// return (
-// )
-
-
 export default connect(selector, {})(App)

@@ -1,0 +1,28 @@
+.orders-page{
+  display: flex;
+  .control-panel{
+    flex-shrink: 0;
+
+    width: 55px;
+    display: block;
+    padding: 0 0.5rem;
+    button{
+      display: none;
+      float: left;
+      margin-bottom:10px;
+      border: 1px solid gray;
+      border-radius: 4px;
+      width:40px;
+      height: 40px;
+    }
+  }
+  .content{
+    width: 70%;
+    margin-right:1em;
+  }
+  .sidebar{
+    width: 25%;
+    margin-right:1em;
+  }
+}
+

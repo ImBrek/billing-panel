@@ -52,8 +52,9 @@ class OrderedService extends ActiveRecordExt {
 				'required',
 				'when' => function ( $model ) {
 					return ! $model->option_id;
-			}
-			]
+				}
+			],
+			[ 'value', 'string', 'max' => 255 ]
 		];
 	}
 

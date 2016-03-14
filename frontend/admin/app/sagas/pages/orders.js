@@ -68,7 +68,7 @@ function* waitSuccessLogin(){
     }
 }
 
-export function* watchForm () {
+export function* mainWatch () {
     while (true) {
         yield take((action)=> {
             return action.type == PAGE_ACTIVATE && action.payload.name == 'orders';

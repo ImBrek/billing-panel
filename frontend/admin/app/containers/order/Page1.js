@@ -217,8 +217,8 @@ class Page1 extends Component {
 }
 
 export default reduxForm({
-    form: 'orderService',              // <------ same form name
-    fields,                      // <------ only fields on this page
-    destroyOnUnmount: false,     // <------ preserve form data
-    validate                     // <------ only validates the fields on this page
+    form: 'orderService',
+    fields, 
+    destroyOnUnmount: false,
+    validate
 }, null, {})(Page1);

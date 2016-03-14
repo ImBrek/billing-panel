@@ -8,6 +8,7 @@ import * as pageServices from './pages/services'
 import * as pageOrders from './pages/orders'
 import * as signIn from './signIn'
 import * as init from './init'
+import * as pageOrdersAdm from './pages/ordersAdm'
 
 export default function* root () {
     yield [
@@ -20,8 +21,9 @@ export default function* root () {
         fork(watchEntities),
         fork(pageServices.watchServices),
         fork(pageOrders.watchOrders),
-        fork(pageOrders.watchForm),
+        fork(pageOrders.mainWatch),
         fork(signIn.tokenControl),
-        fork(signIn.form)
+        fork(signIn.form),
+        fork(pageOrdersAdm.mainWatch)
     ];
 }

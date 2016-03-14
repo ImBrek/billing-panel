@@ -169,7 +169,11 @@ class IndexAction extends \yii\rest\IndexAction {
 			$expandResult[] = $key;
 			$this->query->$method( [
 				$key => function ( $query ) use ( $result, $showDeleted,$schema ) {
-					$query->andWhere(['is_deleted'=>false]);
+					$className = $query->modelClass;
+					$tableSchema = $schema->getTableSchema($className::tableName());
+					if ( isset( $tableSchema->columns['is_deleted'] ) ) {
+						$query->andWhere(['is_deleted'=>false]);
+					}
 //					if ( isset( $result['filter'] ) ) {
 //						$queryBuilder = new ApiQueryBuilder( \Yii::$app->db,$query );
 //						$queryBuilder->attachCondition($result['filter'],$query->params);
