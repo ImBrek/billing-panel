@@ -2,12 +2,14 @@ import {combineReducers} from 'redux';
 import login from './login';
 import services from './services';
 import orders from './orders';
+import dashboard from './dashboard';
 import {PAGE_ACTIVATE} from 'actions/pages/index';
 
 const activeReducers = {
     login,
     services,
-    orders
+    orders,
+    dashboard
 };
 
 export default function (state, action) {

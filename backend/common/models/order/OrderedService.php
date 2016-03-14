@@ -41,13 +41,6 @@ class OrderedService extends ActiveRecordExt {
 	public function rules() {
 		return [
 			[
-				'value',
-				'required',
-				'when' => function ( $model ) {
-					return $model->service && $model->service->type === 0;
-				}
-			],
-			[
 				'option_id',
 				'required',
 				'when' => function ( $model ) {

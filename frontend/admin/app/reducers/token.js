@@ -9,7 +9,7 @@ export default function token(state = initialState, action) {
             return Object.assign({}, state, action.payload.response.entities.tokens[action.payload.response.result]);
             break;
         case TOKEN.DELETE.SUCCESS:
-            return {};
+            return null;
         default:
             return state
     }

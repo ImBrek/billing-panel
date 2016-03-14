@@ -7,6 +7,8 @@ const initValue = {
     stCategories:{},
     stServices:{},
     stOptions:{},
+    users:{},
+    orders:{}
 }
 
 export default function entities(state = initValue, action) {

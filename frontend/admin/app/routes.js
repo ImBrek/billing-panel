@@ -9,9 +9,9 @@ export default (
   <Route path="/" component={App}>
     <Route path="/orders"
            component={Orders} />
-    <Route path="/dashboard"
-           component={Dashboard}/>
     <Route path="/services"
            component={Services}/>
+      <Route path="/dashboard"
+             component={Dashboard}/>
   </Route>
 );

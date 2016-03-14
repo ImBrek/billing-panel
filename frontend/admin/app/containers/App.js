@@ -13,7 +13,7 @@ class App extends Component {
 
     render () {
         const {children, inputValue, token} = this.props;
-        if (token && token.accessToken) {
+        if (true || token && token.accessToken) {
             return (
                 <div>
                     {children}

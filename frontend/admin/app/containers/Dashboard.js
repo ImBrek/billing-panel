@@ -1,47 +1,59 @@
 import React, {Component, PropTypes} from 'react'
 import {connect} from 'react-redux'
 import {createSelector} from 'reselect';
-import {readCategory} from 'actions/category'
-import {
-    categoryUpdateShow,
-    categoryDeleteShow,
-} from 'actions/dialogs/category'
+import { map } from 'lodash/collection'
 
-class Dashboard extends Component {
+import NavBar from 'containers/NavBar'
+import {getOrder} from 'actions/order'
+import {pageActivate} from 'actions/pages/index'
+
+export const selector = createSelector(
+    state => state.pages.dashboard,
+    state => state.entities.orders,
+    (page, orders) => {
+        return {
+            page,
+            orders: map(page.orders, (id)=> {
+                return Object.assign({}, orders[id]);
+            })
+        }
+    }
+);
+
+
+@connect(selector,{
+    getOrder,
+    pageActivate:()=>pageActivate('dashboard')
+})
+export default class Dashboard extends Component {
     constructor (props) {
         super(props)
-        this.test = this.test.bind(this);
     }
 
     componentWillMount () {
-        console.log('mount');
+        this.props.pageActivate();
+        this.props.getOrder();
     }
-
-    test(){
-        var result = this.props.categoryDeleteShow(25);
-    }
-
 
     render () {
+        console.log(this.props);
         return (
             <div>
-                <button onClick={this.test}>aa</button>
-                Hello world;
+                <NavBar />
+                <button className="btn btn-primary">
+                    <i className="fa fa-spinner"></i>
+                </button>
+                <table className="table-stripped table table-bordered">
+                    <thead></thead>
+                    <tbody>
+                        {this.props.orders.map((order)=>{
+                            return <tr key={order.id}>
+                                <td >{order.id}</td>
+                            </tr>
+                        })}
+                    </tbody>
+                </table>
             </div>
         )
     }
 }
-
-//export const selector = createSelector(
-//    state => state.pages.login,
-//    page => {
-//        return {
-//            page
-//        }
-//    }
-//);
-
-export default connect(null, {
-    readCategory,
-    categoryDeleteShow
-})(Dashboard)

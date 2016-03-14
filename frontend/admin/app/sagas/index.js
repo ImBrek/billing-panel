@@ -6,7 +6,8 @@ import * as addtServiceDialogs from './dialogs/addtService'
 import watchEntities from './entities'
 import * as pageServices from './pages/services'
 import * as pageOrders from './pages/orders'
-import * as auth from './auth'
+import * as signIn from './signIn'
+import * as init from './init'
 
 export default function* root () {
     yield [
@@ -19,7 +20,8 @@ export default function* root () {
         fork(watchEntities),
         fork(pageServices.watchServices),
         fork(pageOrders.watchOrders),
-        // fork(pageOrders.watchForm),
-        fork(auth.watchAuth)
+        fork(pageOrders.watchForm),
+        fork(signIn.tokenControl),
+        fork(signIn.form)
     ];
 }

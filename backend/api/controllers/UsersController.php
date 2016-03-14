@@ -6,7 +6,7 @@ use common\models\User;
 use yii\web\NotFoundHttpException;
 
 class UsersController extends BaseController {
-    public $modelClass = 'common\models\User';
+	public $modelClass = 'common\models\User';
 
 //    public function checkAccess($action, $model = null, $params = []) {
 //        //Разрешаем пользователю просматривать информацию о себе
@@ -16,23 +16,47 @@ class UsersController extends BaseController {
 //        parent::checkAccess($action,$model,$params);
 //    }
 //
-    public function actionCheck($username){
-        if (\Yii::$app->getRequest()->getMethod() == 'OPTIONS') return;
-        $user = User::find()->andWhere([
-            'username'=>$username
-        ])->one();
-        if ($user){
-            return [];
-        } else {
-            throw new NotFoundHttpException;
-        }
-    }
+	public function actionCheck( $username='', $email='', $jabber='' ) {
+		if ( \Yii::$app->getRequest()->getMethod() == 'OPTIONS' ) {
+			return;
+		}
+		
+		$jabberCount = 0;
+		$usernameCount = 0;
+		$emailCount = 0;
 
-    public function actions() {
-        $actions = parent::actions();
-        unset($actions['update']);
-        unset($actions['delete']);
-        return $actions;
-    }
+		if ( $username ) {
+			$usernameCount = User::find()->andWhere( [
+				'username' => $username
+			] )->count();
+		}
+		if ( $jabber ) {
+			$jabberCount = User::find()->andWhere( [
+				'jabber' => $jabber
+			] )->count();
+		}
+		if ( $email ) {
+			$emailCount = User::find()->andWhere( [
+				'email' => $email
+			] )->count();
+		}
+		if ( $usernameCount || $jabberCount || $usernameCount ) {
+			return [
+				'username' => $usernameCount > 0,
+				'email'    => $emailCount > 0,
+				'jabber'   => $jabberCount > 0
+			];
+		} else {
+			throw new NotFoundHttpException;
+		}
+	}
+
+	public function actions() {
+		$actions = parent::actions();
+		unset( $actions['update'] );
+		unset( $actions['delete'] );
+
+		return $actions;
+	}
 
 }

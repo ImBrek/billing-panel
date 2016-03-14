@@ -57,6 +57,7 @@ class User extends ActiveRecordExt implements IdentityInterface {
 			[ [ 'email', 'jabber' ], 'email' ],
 			[ [ 'jabber', 'name', 'username' ], 'required' ],
 			[ [ 'email', 'jabber', 'name', 'username' ], 'string', 'max' => 255 ],
+			[ ['username','jabber','email'], 'unique' ]
 		];
 	}
 

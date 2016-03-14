@@ -4,14 +4,14 @@ import  classnames  from 'classnames'
 import _ from 'lodash';
 
 export const fields = [
-    'firstName',
-    'lastName',
     'categoryId',
     'serviceId',
     'descendants[].id',
     'descendants[].cost',
     'descendants[].optionId',
+    'descendants[].serviceId',
     'descendants[].value',
+    'descendants[]._type',
 
 ];
 
@@ -27,14 +27,13 @@ const validate = values => {
     if (values.descendants.length) {
         errors.descendants = [];
         values.descendants.forEach((service)=>{
-            // const error = {};
-            // if (!(service.optionId || service.value.value)){
-            //     error.optionId = 'Required';
-            // }
-            // errors.descendants.push(error);
+            const error = {};
+            if (!service.optionId && service._type===1){
+                error.optionId = 'Required';
+            }
+            errors.descendants.push(error);
         })
     }
-
     return errors;
 };
 
@@ -64,7 +63,9 @@ class Page1 extends Component {
         if (selectedService) {
             selectedService.descendants.map((addt)=> {
                 descendants.addField({
-                    id: addt.id
+                    id: addt.id,
+                    serviceId:addt.id,
+                    _type: addt.type,
                 });
             })
         }
@@ -112,7 +113,7 @@ class Page1 extends Component {
 
         if (selectedService) {
             const list = selectedService.descendants.map((addt, index)=> {
-                return (<div className={classnames("form-group",{"has-error":false})}>
+                return (<div className={classnames("form-group",{"has-error":descendants[index].optionId.error})}>
                     <label className="col-sm-2 control-label">{addt.title}</label>
                     <div className="col-sm-9">
                         {this.renderAddtServiceInput(addt, descendants[index])}
@@ -169,7 +170,9 @@ class Page1 extends Component {
         const {
             fields: {firstName, lastName, categoryId, serviceId, test},
             handleSubmit,
-            servicesTree
+            servicesTree,
+            error,
+            invalid
         } = this.props;
 
         const [selectedCategory,categoriesList] = this.renderCategories();
@@ -203,7 +206,7 @@ class Page1 extends Component {
                 </div>
                 <div className="form-group">
                     <div className="col-sm-offset-2 col-sm-9">
-                        <button type="submit" className="btn btn-primary">
+                        <button type="submit" className="btn btn-primary" disabled={invalid}>
                             Next <i/>
                         </button>
                     </div>
@@ -214,7 +217,7 @@ class Page1 extends Component {
 }
 
 export default reduxForm({
-    form: 'wizard',              // <------ same form name
+    form: 'orderService',              // <------ same form name
     fields,                      // <------ only fields on this page
     destroyOnUnmount: false,     // <------ preserve form data
     validate                     // <------ only validates the fields on this page
