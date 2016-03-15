@@ -1,0 +1,11 @@
+.table-tree .expand-control {
+  margin-right: 1em;
+  cursor: pointer; }
+.table-tree .level-1 .intend {
+  position: relative;
+  left: 2rem; }
+.table-tree .level-2 .intend {
+  position: relative;
+  left: 4rem; }
+
+/*# sourceMappingURL=tableTree.css.map */

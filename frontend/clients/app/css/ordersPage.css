@@ -1,0 +1,19 @@
+.services-page {
+  display: flex; }
+  .services-page .control-panel {
+    flex-shrink: 0;
+    width: 55px;
+    display: block;
+    padding: 0 0.5rem; }
+    .services-page .control-panel button {
+      display: none;
+      float: left;
+      margin-bottom: 10px;
+      border: 1px solid gray;
+      border-radius: 4px;
+      width: 40px;
+      height: 40px; }
+  .services-page .content {
+    width: 100%; }
+
+/*# sourceMappingURL=ordersPage.css.map */
