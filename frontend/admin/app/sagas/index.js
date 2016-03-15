@@ -5,10 +5,8 @@ import * as serviceDialogs from './dialogs/service'
 import * as addtServiceDialogs from './dialogs/addtService'
 import watchEntities from './entities'
 import * as pageServices from './pages/services'
+import * as login from './login'
 import * as pageOrders from './pages/orders'
-import * as signIn from './signIn'
-import * as init from './init'
-import * as pageOrdersAdm from './pages/ordersAdm'
 
 export default function* root () {
     yield [
@@ -20,10 +18,8 @@ export default function* root () {
         fork(addtServiceDialogs.watchDelete),
         fork(watchEntities),
         fork(pageServices.watchServices),
-        fork(pageOrders.watchOrders),
+        fork(login.tokenControl),
+        fork(login.form),
         fork(pageOrders.mainWatch),
-        fork(signIn.tokenControl),
-        fork(signIn.form),
-        fork(pageOrdersAdm.mainWatch)
     ];
 }

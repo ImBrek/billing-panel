@@ -120,7 +120,6 @@ function validate (data) {
             if (data.options[i].cost === undefined) errors.options[i].cost = 'Required'
         }
     }
-    console.log(data, errors);
     return errors;
 }
 

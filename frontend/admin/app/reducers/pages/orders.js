@@ -1,37 +1,30 @@
-import { TREE_REQUEST,TREE_SUCCESS,TREE_FAILURE } from 'actions/pages/services'
-import { NEXT,PREV,SET } from 'actions/pages/orders'
+import {ORDER} from 'actions/order';
+import {ORDER as ORDER_TREE} from 'actions/pages/orders';
+import { ENTITY_SELECT } from 'actions/entities';
 
 export default function (state = {
     isFetching: false,
     selectedEntity: {},
-    currentPage:0
 }, action) {
     switch (action.type) {
-        case TREE_REQUEST:
+        case ORDER_TREE.READ.REQUEST:
             return Object.assign({}, state, {
                 isFetching: true
             });
-        case TREE_SUCCESS:
-            return Object.assign({}, state, {
+        case ORDER_TREE.READ.SUCCESS:
+            return Object.assign({},state,{
                 isFetching: false,
-                categories:action.payload.response.result
+                orders:action.payload.response.result
             });
-        case TREE_FAILURE:
+         case ORDER_TREE.READ.FAILURE:
             return Object.assign({}, state, {
                 isFetching: false
             });
-        case NEXT:
+        case ENTITY_SELECT:
             return Object.assign({}, state, {
-                currentPage:state.currentPage + 1
-            });
-        case PREV:
-            return Object.assign({}, state, {
-                currentPage:state.currentPage - 1
-            });
-        case SET:
-            return Object.assign({}, state, {
-                currentPage:action.payload
-            });
+                selectedEntity: action.payload
+            })
+
         default:
             return state;
 

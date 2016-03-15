@@ -1,7 +1,0 @@
-{
-"version": 3,
-"mappings": "AAAA,WAAW;EACT,MAAM,EAAE,eAAe",
-"sources": ["loginPage.scss"],
-"names": [],
-"file": "loginPage.css"
-}

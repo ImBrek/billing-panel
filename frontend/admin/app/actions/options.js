@@ -1,7 +1,7 @@
 import { createAction } from 'redux-actions';
 
 import { CALL_API,API_CREATE,API_READ,API_UPDATE } from 'middleware/apiExt';
-import schemas from 'middleware/schemas';
+import schemas from 'services/schemas';
 
 export const OPTION_REQUEST = 'OPTION_REQUEST';
 export const OPTION_SUCCESS = 'OPTION_SUCCESS';

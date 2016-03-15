@@ -1,7 +1,7 @@
 import {createAction} from 'redux-actions';
 import {createCRUD} from 'actions/helpers';
 import {API_READ} from 'services/api';
-import schemas from 'middleware/schemas';
+import schemas from 'services/schemas';
 
 export const NEXT = 'PAGES/ORDERS/NEXT_PAGE';
 export const PREV = 'PAGES/ORDERS/PREV_PAGE';

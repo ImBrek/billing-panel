@@ -9,7 +9,6 @@ import * as login from './login'
 export default function* root () {
     yield [
         fork(watchEntities),
-        // fork(pageOrdersPublic.watchOrders),
         fork(pageOrdersPublic.mainWatch),
         fork(pageOrders.mainWatch),
         fork(pageLogin.main),
