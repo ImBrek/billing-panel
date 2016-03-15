@@ -23,25 +23,21 @@ class OrderTest extends DbTestCase {
 	}
 
 	public function testCreate() {
-		$order             = new Order();
-		$order->scenario   = Order::SCENARIO_CREATE;
-		$order->attributes = [
-			'client_id' => 1
-		];
-		$this->assertTrue( $order->save(),print_r($order->getErrors(),true) );
+		$order            = new Order();
+		$order->scenario  = Order::SCENARIO_CREATE;
+		$order->client_id = 1;
+		$this->assertTrue( $order->save(), print_r( $order->getErrors(), true ) );
 
 	}
 
 	public function testCreateWithServices() {
 		$order                  = new Order();
 		$order->scenario        = Order::SCENARIO_CREATE;
-		$order->attributes      = [
-			'client_id' => 1
-		];
+		$order->client_id       = 1;
 		$order->orderedServices = [
 			[
 				'service_id' => 6,
-				'value'      => 65, //input type service
+				'value'      => '65', //input type service
 			],
 			[
 				'service_id' => 1, // root service
@@ -54,19 +50,17 @@ class OrderTest extends DbTestCase {
 			],
 		];
 
-		$this->assertTrue( $order->save() );
+		$this->assertTrue( $order->save(), print_r( $order->getErrors(), true ) );
 	}
 
 	public function testValidateWithoutRootService() {
 		$order                  = new Order();
 		$order->scenario        = Order::SCENARIO_CREATE;
-		$order->attributes      = [
-			'clientId' => 1
-		];
+		$order->client_id       = 1;
 		$order->orderedServices = [
 			[
 				'service_id' => 6,
-				'value'      => 65, //input type service
+				'value'      => '65', //input type service
 			],
 			[
 				'option_id' => 1, // select type service
@@ -83,13 +77,11 @@ class OrderTest extends DbTestCase {
 	public function testValidateWithBadService() {
 		$order                  = new Order();
 		$order->scenario        = Order::SCENARIO_CREATE;
-		$order->attributes      = [
-			'clientId' => 1
-		];
+		$order->client_id       = 1;
 		$order->orderedServices = [
 			[
 				'service_id' => 6, //input type service
-				'value'      => 65,
+				'value'      => '65',
 			],
 			[
 				'service_id' => 2, // root service
@@ -103,9 +95,7 @@ class OrderTest extends DbTestCase {
 	public function testValidateWithBadOption() {
 		$order                  = new Order();
 		$order->scenario        = Order::SCENARIO_CREATE;
-		$order->attributes      = [
-			'client_id' => 1
-		];
+		$order->client_id       = 1;
 		$order->orderedServices = [
 			[
 				'service_id' => 2, // root service
@@ -122,9 +112,7 @@ class OrderTest extends DbTestCase {
 	public function testValidateChildModel() {
 		$order                  = new Order();
 		$order->scenario        = Order::SCENARIO_CREATE;
-		$order->attributes      = [
-			'client_id' => 1
-		];
+		$order->client_id       = 1;
 		$order->orderedServices = [
 			[
 				'service_id' => 6, //input type service
@@ -133,27 +121,24 @@ class OrderTest extends DbTestCase {
 				'service_id' => 1, // root service
 			],
 			[
-				'option_id' => 1, // select type service
 			],
 			[
 				'option_id' => 4, // select type service
 			],
 		];
 
-		$this->assertFalse( $order->validate() );
-		$this->assertNotNull( $order->getFirstError( 'services[0]' ) );
+		$this->assertFalse( $order->validate());
+		$this->assertNotNull( $order->getFirstError( 'services[2]' ) );
 	}
 
 	public function testValidateServicesAmount() {
 		$order                  = new Order();
 		$order->scenario        = Order::SCENARIO_CREATE;
-		$order->attributes      = [
-			'client_id' => 1
-		];
+		$order->client_id       = 1;
 		$order->orderedServices = [
 			[
 				'service_id' => 6, //input type service
-				'value'      => 65,
+				'value'      => '65',
 			],
 			[
 				'service_id' => 1, // root service
@@ -167,13 +152,13 @@ class OrderTest extends DbTestCase {
 		$this->assertEquals( "Not enough services", $order->getFirstError( 'services' ) );
 	}
 
-	public function testDelete(){
-		$order = $this->order(1);
+	public function testDelete() {
+		$order = $this->order( 1 );
 
 		$order->delete();
 
 		$order->refresh();
-		$this->assertTrue($order->is_deleted);
+		$this->assertTrue( $order->is_deleted );
 	}
 
 }

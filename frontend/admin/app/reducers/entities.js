@@ -8,7 +8,8 @@ const initValue = {
     stServices:{},
     stOptions:{},
     users:{},
-    orders:{}
+    orders:{},
+    clients:{}
 }
 
 export default function entities(state = initValue, action) {

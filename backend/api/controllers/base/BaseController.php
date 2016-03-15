@@ -70,13 +70,13 @@ class BaseController extends ActiveController {
 			],
 
 		];
-//		$result['_authenticator'] = [
-//			'class'       => CompositeAuth::className(),
-//			'authMethods' => [
-//				HttpBearerAuth::className(),
-//				QueryParamAuth::className()
-//			]
-//		];
+		$result['authenticator'] = [
+			'class'       => CompositeAuth::className(),
+			'authMethods' => [
+				HttpBearerAuth::className(),
+				QueryParamAuth::className()
+			]
+		];
 
 		return $result;
 	}

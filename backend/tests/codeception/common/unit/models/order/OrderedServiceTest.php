@@ -44,19 +44,7 @@ class OrderedServiceTest extends DbTestCase {
 		$this->assertNotNull($service->getFirstError('option_id'));
 		$this->assertNotNull($service->getFirstError('service_id'));
 	}
-
-	public function testValidateValue(){
-		$service = new OrderedService([
-			'scenario'=>OrderedService::SCENARIO_CREATE
-		]);
-		$service->attributes = [
-			'order_id'=>2,
-			'service_id'=>6
-		];
-
-		$this->assertFalse($service->validate());
-		$this->assertNotNull($service->getFirstError('value'));
-	}
+	
 
 
 

@@ -3,12 +3,7 @@
 namespace api\controllers\base;
 
 use api\components\ApiQueryBuilder;
-use common\components\ActiveRecordExt;
 use common\components\Helpers;
-use common\models\Buildings;
-use common\models\Streets;
-use common\models\Users;
-use yii\web\ForbiddenHttpException;
 
 class ViewAction extends \yii\rest\ViewAction {
 	public $queryBuilder;

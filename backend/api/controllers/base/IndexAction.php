@@ -2,8 +2,6 @@
 namespace api\controllers\base;
 
 use api\components\ApiQueryBuilder;
-use common\models\Users;
-use yii\db\Expression;
 
 class IndexAction extends \yii\rest\IndexAction {
 	public $queryBuilder;

@@ -32,6 +32,7 @@ class UserTest extends DbTestCase {
 			'email'    => 'test@test.com'
 		];
 		$this->assertTrue( $model->save() );
+		$this->assertNotNull($model->client_id);
 	}
 
 	public function testUpdate() {

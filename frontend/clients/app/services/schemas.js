@@ -10,6 +10,7 @@ const order = new Schema('orders');
 const orderedService = new Schema('orderedServices');
 
 const user = new Schema('users');
+const client = new Schema('clients');
 
 stCategory.define({
     services: arrayOf(stService)
@@ -21,7 +22,8 @@ stService.define({
 });
 
 order.define({
-    orderedServices: arrayOf(orderedService)
+    orderedServices: arrayOf(orderedService),
+    client: client
 });
 
 orderedService.define({

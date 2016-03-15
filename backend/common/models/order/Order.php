@@ -41,7 +41,6 @@ class Order extends ActiveRecordExt {
 	 */
 	public function rules() {
 		return [
-			[ 'client_id', 'required', 'on' => self::SCENARIO_CREATE ]
 		];
 	}
 
@@ -119,7 +118,7 @@ class Order extends ActiveRecordExt {
 					$this->addError( "services[$index]", 'Service not descendant root service' );
 				}
 			} else {
-				if ( $service->option->service->parent_id != $rootServiceType->id ) {
+				if ( $service->option && $service->option->service->parent_id != $rootServiceType->id ) {
 					$this->addError( "services[$index]", 'Option not descendant root service' );
 				}
 			}

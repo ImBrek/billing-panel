@@ -16,14 +16,14 @@ class UsersController extends BaseController {
 //        parent::checkAccess($action,$model,$params);
 //    }
 //
-	public function actionCheck( $username='', $email='', $jabber='' ) {
+	public function actionCheck( $username = '', $email = '', $jabber = '' ) {
 		if ( \Yii::$app->getRequest()->getMethod() == 'OPTIONS' ) {
 			return;
 		}
-		
-		$jabberCount = 0;
+
+		$jabberCount   = 0;
 		$usernameCount = 0;
-		$emailCount = 0;
+		$emailCount    = 0;
 
 		if ( $username ) {
 			$usernameCount = User::find()->andWhere( [
@@ -57,6 +57,15 @@ class UsersController extends BaseController {
 		unset( $actions['delete'] );
 
 		return $actions;
+	}
+
+	public function behaviors() {
+		$behaviors = parent::behaviors();
+		if ($this->action->id == 'check' || $this->action->id == 'create'){
+			unset( $behaviors['authenticator'] );
+		}
+
+		return $behaviors;
 	}
 
 }

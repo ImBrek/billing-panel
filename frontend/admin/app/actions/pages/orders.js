@@ -22,7 +22,7 @@ export const getTree = createAction(ORDER.READ.REQUEST, ()=> {
         method: API_READ,
         endpoint: 'orders/orders',
         queryParams: {
-            expand: 'orderedServices,orderedServices.option,orderedServices.service'
+            expand: 'orderedServices,orderedServices.option,orderedServices.service,client'
         },
         actions: ORDER.READ,
         schema: schemas.ORDER_ARRAY

@@ -16,6 +16,7 @@ class UsersCest {
 	}
 
 	public function view( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
 		$I->sendGET( 'users/1' );
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs( 200 );
@@ -23,6 +24,7 @@ class UsersCest {
 	}
 
 	public function index( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
 		$I->sendGET( 'users' );
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs( 200 );
@@ -30,6 +32,7 @@ class UsersCest {
 	}
 
 	public function update( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
 		$I->sendPUT( 'users/1' );
 		$I->seeResponseCodeIs( 404 );
 	}
@@ -49,6 +52,7 @@ class UsersCest {
 	}
 
 	public function delete( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
 		$I->sendDELETE( 'users/1' );
 		$I->seeResponseCodeIs( 404 );
 	}

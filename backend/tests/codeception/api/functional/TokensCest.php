@@ -42,8 +42,6 @@ class TokensCest {
 			// password_0
 			'password_hash' => '$2y$13$nJ1WDlBaGcbCdbNC5.5l4.sgy.OMEKCqtDQOdQ2OWpgiKRWYyzzne',
 			'password_reset_token' => 'hdfghfghfEFfYR7VbMr_1392559490',
-			'created_at' => '1392559490',
-			'updated_at' => '1392559490',
 			'email' => 'test@jenkins.info',
 			'access_token'          => 'access_token',
 			'refresh_token'         => 'refresh_token_expires',
@@ -58,11 +56,5 @@ class TokensCest {
 		$I->seeResponseCodeIs( 401 );
 	}
 
-	public function login(){
-	    
-	}
-	
-//	public function delete( FunctionalTester $I ) {
-//	}
 
 }

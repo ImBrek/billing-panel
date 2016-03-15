@@ -6,12 +6,15 @@ use common\models\order\OrderedService;
 use common\models\servicesTypes\Category;
 use tests\codeception\api\FunctionalTester;
 use tests\codeception\common\fixtures\OrderedServiceFixture;
+use tests\codeception\common\fixtures\UserFixture;
 
 class OrderCest {
 	public function _before( FunctionalTester $I ) {
 		$I->initFixtures( [
-			OrderedServiceFixture::className()
+			OrderedServiceFixture::className(),
+			UserFixture::className()
 		] );
+		$I->addAuthorizationHeader(2);
 	}
 
 	public function _after( FunctionalTester $I ) {
@@ -38,7 +41,6 @@ class OrderCest {
 
 	public function create( FunctionalTester $I ) {
 		$I->sendPOST( 'orders/orders', [
-			'client_id'        => 1,
 			'ordered_services' => [
 				[
 					'service_id' => 6,
@@ -58,7 +60,7 @@ class OrderCest {
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs( 201 );
 		$id = $I->grabDataFromResponseByJsonPath( 'id' );
-		$I->seeRecord( Order::className(), [ 'id' => $I->grabDataFromResponseByJsonPath( 'id' ) ] );
+		$I->seeRecord( Order::className(), [ 'id' => $id ] );
 		$I->seeRecord( OrderedService::className(), [
 			'order_id'   => $id,
 			'service_id' => 1
@@ -76,6 +78,10 @@ class OrderCest {
 			'option_id' => 4,
 			'order_id'  => $id
 		] );
+
+		$order = $I->grabRecord(Order::className(),['id'=>$id]);
+		$I->assertNotNull($order->client_id);
+
 	}
 
 	public function delete( FunctionalTester $I ) {

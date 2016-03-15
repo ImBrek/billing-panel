@@ -19,7 +19,7 @@ class OrdersController extends BaseController {
 		/** @var Order $model */
 		$model = parent::objectCreator();
 		$model->orderedServices = $params['ordered_services'];
-
+		$model->client_id = \Yii::$app->user->identity->client_id;
 		return $model;
 	}
 

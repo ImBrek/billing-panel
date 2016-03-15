@@ -43,9 +43,9 @@ export default function (options) {
 
 
     //add authorization header
-    const token = 'TOKEN';
+    const token = JSON.parse(localStorage.getItem('billing.token'));
     if (token) {
-        headers['Authorization'] = `Token ${token}`
+        headers['Authorization'] = `Bearer ${token.accessToken}`
     }
     return fetch(endpoint, {method, body, credentials, headers})
         .then(response => {

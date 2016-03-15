@@ -8,7 +8,8 @@ use Yii;
 /**
  * Client model
  *
- * @property integer  $id
+ * @property integer $id
+ * @property string  $title
  *
  * @property Order[] $orders
  */
@@ -33,6 +34,7 @@ class Client extends ActiveRecordExt {
 	 */
 	public function rules() {
 		return [
+			[ 'title', 'string', 'max' => 255 ]
 		];
 	}
 
@@ -51,5 +53,12 @@ class Client extends ActiveRecordExt {
 	 */
 	public function getOrders() {
 		return $this->hasMany( Order::className(), [ 'client_id' => 'id' ] );
+	}
+
+	/**
+	 * @return \yii\db\ActiveQuery
+	 */
+	public function getUsers() {
+		return $this->hasMany( User::className(), [ 'id' => 'client_id' ] );
 	}
 }

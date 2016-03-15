@@ -36,6 +36,7 @@ class ServiceCest {
 	}
 
 	public function update( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendPUT( 'services-types/services/1', [
 			'title' => 'test_new'
 		] );
@@ -48,6 +49,7 @@ class ServiceCest {
 	}
 
 	public function create( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendPOST( 'services-types/services', [
 			'title'       => 'test_new',
 			'type'        => 1,
@@ -60,6 +62,7 @@ class ServiceCest {
 	}
 
 	public function createWithOptions( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendPOST( 'services-types/services', [
 			'title'       => 'test_new_super',
 			'type'        => Service::TYPE_SELECT,
@@ -85,6 +88,7 @@ class ServiceCest {
 	}
 
 	public function updateWithOptions( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendPUT( 'services-types/services/4', [
 			'id'      => 4,
 			'title'   => 'test_new_super',
@@ -108,6 +112,7 @@ class ServiceCest {
 	}
 
 	public function delete( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendDELETE( 'services-types/services/1' );
 		$I->seeResponseCodeIs( 204 );
 	}

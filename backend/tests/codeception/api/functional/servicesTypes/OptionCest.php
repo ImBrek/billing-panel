@@ -35,6 +35,7 @@ class OptionCest {
 	}
 
 	public function update( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendPUT( 'services-types/options/1', [
 			'title' => 'test_new'
 		] );
@@ -47,6 +48,7 @@ class OptionCest {
 	}
 
 	public function create( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendPOST( 'services-types/options', [
 			'title' => 'test_new',
 			'cost'=>1000,
@@ -58,6 +60,7 @@ class OptionCest {
 	}
 
 	public function delete( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendDELETE( 'services-types/options/1');
 		$I->seeResponseCodeIs( 204 );
 	}

@@ -17,6 +17,7 @@ use yii\web\IdentityInterface;
  * @property string  $password_hash
  * @property string  $password_reset_token
  * @property string  $email
+ * @property string  $jabber
  * @property string  $auth_key
  * @property integer $status
  * @property integer $created_at
@@ -26,6 +27,8 @@ use yii\web\IdentityInterface;
  * @property string  $access_token_expires
  * @property string  $refresh_token
  * @property string  $refresh_token_expires
+ * @property boolean $is_admin
+ * @property integer $client_id
  */
 class User extends ActiveRecordExt implements IdentityInterface {
 	const STATUS_DELETED = 0;
@@ -43,7 +46,6 @@ class User extends ActiveRecordExt implements IdentityInterface {
 	 */
 	public function behaviors() {
 		return [
-			TimestampBehavior::className(),
 		];
 	}
 
@@ -57,7 +59,7 @@ class User extends ActiveRecordExt implements IdentityInterface {
 			[ [ 'email', 'jabber' ], 'email' ],
 			[ [ 'jabber', 'name', 'username' ], 'required' ],
 			[ [ 'email', 'jabber', 'name', 'username' ], 'string', 'max' => 255 ],
-			[ ['username','jabber','email'], 'unique' ]
+			[ [ 'username', 'jabber', 'email' ], 'unique' ]
 		];
 	}
 
@@ -240,16 +242,30 @@ class User extends ActiveRecordExt implements IdentityInterface {
 	 * @inheritDoc
 	 */
 	public function beforeSave( $insert ) {
-		$result = parent::beforeSave( $insert );
-		if ( $result ) {
+		if ( parent::beforeSave( $insert ) ) {
 			if ( $insert ) {
 				$this->generateAuthKey();
+				if ( ! $this->is_admin ) {
+					$this->createNewClient();
+				}
 			}
 
 			return true;
 		} else {
 			return false;
 		}
+	}
+
+	/**
+	 * Create new client for new regular user
+	 * @return bool
+	 */
+	public function createNewClient() {
+		$client        = new Client();
+		$client->title = $this->jabber;
+		$result = $client->save();
+		$this->client_id = $client->id;
+		return $result;
 	}
 
 	/**
@@ -264,6 +280,7 @@ class User extends ActiveRecordExt implements IdentityInterface {
 		unset( $fields['password_reset_token'] );
 		unset( $fields['auth_key'] );
 		unset( $fields['password_hash'] );
+		unset( $fields['password'] );
 
 		return $fields;
 	}

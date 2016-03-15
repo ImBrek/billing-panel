@@ -18,7 +18,7 @@ import  classnames  from 'classnames'
     }
 },state => ({
     initialValues: {
-        username: 'erau',
+        username: 'reg',
         password: 'password_0',
     }
 }))

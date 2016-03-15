@@ -17,6 +17,7 @@ modules:
           url: http://api.billing.local/
           timeout: 90
           depends: Yii2
+      - Asserts
     config:
         Yii2:
             configFile: '../config/api/functional.php'

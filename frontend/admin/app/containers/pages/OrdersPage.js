@@ -4,7 +4,6 @@ import {createSelector} from 'reselect';
 import {map} from 'lodash/collection'
 import classNames from 'classnames'
 
-import NavBar from 'containers/NavBar'
 import {getTree} from 'actions/pages/orders'
 import {pageActivate} from 'actions/pages/index'
 import {selectEntity} from 'actions/entities'
@@ -15,7 +14,8 @@ export const selector = createSelector(
     state => state.entities.orderedServices,
     state => state.entities.stServices,
     state => state.entities.stOptions,
-    (page, orders, ordServices, services, options) => {
+    state => state.entities.clients,
+    (page, orders, ordServices, services, options, clients) => {
         let s = [];
         if (page.selectedEntity && orders[page.selectedEntity.id]) {
             s = orders[page.selectedEntity.id].orderedServices.map((id)=> {
@@ -34,12 +34,14 @@ export const selector = createSelector(
             orders: map(page.orders, (id)=> {
                 const {service} = orders[id].orderedServices.reduce((result, orderedServiceId)=> {
                     const service = services[ordServices[orderedServiceId].serviceId];
-                    return {
-                        service: service && service.categoryId && service,
-                    };
+                    if (service && service.categoryId) {
+                        result.service = service;
+                    }
+                    return result;
                 }, {});
                 return Object.assign({}, orders[id], {
-                    service
+                    service,
+                    client: clients[orders[id].clientId]
                 });
             }),
             sidebar: {
@@ -95,10 +97,10 @@ export default class OrdersPage extends Component {
                                 onClick={()=>{this.props.selectEntity(order)}}
                             >
                                 <td >{order.id}</td>
-                                <td></td>
-                                <td >{order.service.title}</td>
-                                <td></td>
-                                <td></td>
+                                <td>{order.client.title}</td>
+                                <td>{order.service.title}</td>
+                                <td>{order.isPaid?'yes':'no'}</td>
+                                <td>{order.createdAt}</td>
                                 <td></td>
                             </tr>
                         })}

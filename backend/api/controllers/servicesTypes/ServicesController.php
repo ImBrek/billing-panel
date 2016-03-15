@@ -78,4 +78,15 @@ class ServicesController extends BaseController {
 		return $model;
 	}
 
+	public function behaviors() {
+		$behaviors = parent::behaviors();
+
+		if ($this->action->id == 'view' || $this->action->id == 'index'){
+			unset( $behaviors['authenticator'] );
+		}
+
+		return $behaviors;
+	}
+
+
 }

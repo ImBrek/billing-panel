@@ -30,6 +30,7 @@ class CategoryCest {
 	}
 
 	public function update( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendPUT( 'services-types/categories/1', [
 			'title' => 'test_new'
 		] );
@@ -42,6 +43,7 @@ class CategoryCest {
 	}
 
 	public function create( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendPOST( 'services-types/categories', [
 			'title' => 'test'
 		] );
@@ -51,6 +53,7 @@ class CategoryCest {
 	}
 
 	public function delete( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendDELETE( 'services-types/categories/1');
 		$I->seeResponseCodeIs( 204 );
 	}
