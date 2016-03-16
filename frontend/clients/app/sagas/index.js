@@ -5,6 +5,7 @@ import * as pageOrdersPublic from './pages/ordersPublic'
 import * as pageLogin from './pages/login'
 import * as pageOrders from './pages/orders'
 import * as login from './login'
+import * as users from './users'
 
 export default function* root (getState) {
     yield [
@@ -14,5 +15,6 @@ export default function* root (getState) {
         fork(pageLogin.main),
         fork(login.tokenControl),
         fork(login.form),
+        fork(users.initCurrentUser, getState)
     ];
 }
