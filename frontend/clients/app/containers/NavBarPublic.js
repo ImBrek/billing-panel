@@ -11,7 +11,7 @@ export const selector = createSelector(
     state=>state.token,
     function (users,token) {
         return {
-            user:token && users[token.userId] ? users[token.userId]:{}
+            user:token && users[token.userId] ? users[token.userId]:null
         };
     }
 );

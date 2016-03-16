@@ -54,10 +54,12 @@ export function* mainWatch () {
             return action.type == PAGE_ACTIVATE && action.payload.name == 'ordersPublic';
         });
         yield put(getTree());
-        const task = yield fork(waitCreateUserAndLogin);
-        yield fork(waitSuccessLogin);
-        yield fork(waitCreateOrder);
+        const task1 = yield fork(waitCreateUserAndLogin);
+        const task2 = yield fork(waitSuccessLogin);
+        const task3 = yield fork(waitCreateOrder);
         yield take(PAGE_ACTIVATE);
-        yield cancel(task);
+        yield cancel(task1);
+        yield cancel(task2);
+        yield cancel(task3);
     }
 }
