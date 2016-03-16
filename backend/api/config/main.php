@@ -47,13 +47,13 @@ return [
 				],
 				[
 					'class'      => 'api\components\UrlRule',
-					'controller' => ['users'],
+					'controller' => [ 'users' ],
 				],
 				[
 					'class'   => \yii\web\UrlRule::className(),
 					'pattern' => 'users/check',
 					'route'   => 'users/check',
-					'verb'    => [ 'GET','OPTIONS' ]
+					'verb'    => [ 'GET', 'OPTIONS' ]
 				],
 			],
 		],
@@ -66,6 +66,12 @@ return [
 //		'errorHandler' => [
 //			'errorAction' => 'site/error',
 //		]
+		'user'       => [
+			'class'         => 'common\components\User',
+			'identityClass' => 'common\models\User',
+			'enableSession' => false,
+		],
+
 	],
 	'params'              => $params,
 ];

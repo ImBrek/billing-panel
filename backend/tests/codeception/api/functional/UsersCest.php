@@ -17,7 +17,7 @@ class UsersCest {
 
 	public function view( FunctionalTester $I ) {
 		$I->addAuthorizationHeader(2);
-		$I->sendGET( 'users/1' );
+		$I->sendGET( 'users/2' );
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs( 200 );
 		$I->seeResponseJsonMatchesJsonPath( 'id' );
@@ -25,6 +25,12 @@ class UsersCest {
 
 	public function index( FunctionalTester $I ) {
 		$I->addAuthorizationHeader(2);
+		$I->sendGET( 'users' );
+		$I->seeResponseCodeIs( 403 );
+	}
+
+	public function indexForAdmins( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendGET( 'users' );
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs( 200 );
@@ -56,5 +62,19 @@ class UsersCest {
 		$I->sendDELETE( 'users/1' );
 		$I->seeResponseCodeIs( 404 );
 	}
+
+	public function viewOnlyCurrentUserForRegularUser( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
+		$I->sendGET( 'users/1' );
+		$I->seeResponseCodeIs( 403 );
+	}
+
+	public function viewAllForAdmins( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
+		$I->sendGET( 'users/2' );
+		$I->seeResponseCodeIs( 200 );
+	}
+
+
 
 }

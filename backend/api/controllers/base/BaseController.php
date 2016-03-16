@@ -53,12 +53,6 @@ class BaseController extends ActiveController {
 		return $actions;
 	}
 
-	/**
-	 * @inheritDoc
-	 */
-	public function checkAccess( $action, $model = null, $params = [ ] ) {
-	}
-
 	public function behaviors() {
 		$result                   = parent::behaviors();
 		$result['corsFilter']     = [

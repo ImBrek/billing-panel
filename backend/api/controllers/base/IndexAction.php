@@ -59,7 +59,7 @@ class IndexAction extends \yii\rest\IndexAction {
 		$params     = $request->queryParams;
 
 		if ( $this->checkAccess ) {
-			call_user_func( $this->checkAccess, 'view', $modelClass );
+			call_user_func( $this->checkAccess, 'index', $modelClass );
 		}
 
 		$this->query = call_user_func( $this->queryBuilder, $this );

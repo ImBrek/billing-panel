@@ -3,6 +3,7 @@ namespace api\controllers;
 
 use api\controllers\base\BaseController;
 use common\models\User;
+use yii\web\ForbiddenHttpException;
 use yii\web\NotFoundHttpException;
 
 class UsersController extends BaseController {
@@ -61,11 +62,28 @@ class UsersController extends BaseController {
 
 	public function behaviors() {
 		$behaviors = parent::behaviors();
-		if ($this->action->id == 'check' || $this->action->id == 'create'){
+		if ( $this->action->id == 'check' || $this->action->id == 'create' ) {
 			unset( $behaviors['authenticator'] );
 		}
 
 		return $behaviors;
+	}
+
+	/**
+	 * @inheritDoc
+	 */
+	public function checkAccess( $action, $model = null, $params = [ ] ) {
+		if ( \Yii::$app->user->identity && \Yii::$app->user->identity->is_admin ) {
+			return;
+		}
+		if ( in_array( $action, [ 'check', 'create' ] ) ) {
+			return;
+		}
+		if ( $action == 'view' && $model->id == \Yii::$app->user->id ) {
+			return;
+		}
+
+		throw new ForbiddenHttpException();
 	}
 
 }

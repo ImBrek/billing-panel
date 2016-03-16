@@ -4,6 +4,7 @@ namespace tests\codeception\api\_support;
 
 use tests\codeception\common\fixtures\UserFixture;
 use Codeception\Module;
+use yii\base\Event;
 use yii\test\FixtureTrait;
 use yii\test\InitDbFixture;
 
@@ -33,7 +34,7 @@ class MixHelper extends Module {
 			/** @var ActiveRecord $ids */
 			$className::deleteAll( [ 'id' => $ids ] );
 		}
-//        Event::flush();
+        Event::flush();
 	}
 
 }

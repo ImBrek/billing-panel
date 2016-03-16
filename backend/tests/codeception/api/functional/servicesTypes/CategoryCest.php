@@ -58,4 +58,14 @@ class CategoryCest {
 		$I->seeResponseCodeIs( 204 );
 	}
 
+	public function createOnlyAdmins( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
+		$I->sendPOST( 'services-types/categories', [
+			'title' => 'test'
+		] );
+		$I->seeResponseIsJson();
+		$I->seeResponseCodeIs( 403 );
+	}
+
+
 }

@@ -14,13 +14,13 @@ class OrderCest {
 			OrderedServiceFixture::className(),
 			UserFixture::className()
 		] );
-		$I->addAuthorizationHeader(2);
 	}
 
 	public function _after( FunctionalTester $I ) {
 	}
 
 	public function view( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
 		$I->sendGET( 'orders/orders/1' );
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs( 200 );
@@ -28,6 +28,7 @@ class OrderCest {
 	}
 
 	public function index( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
 		$I->sendGET( 'orders/orders' );
 		$I->seeResponseIsJson();
 		$I->seeResponseCodeIs( 200 );
@@ -35,11 +36,13 @@ class OrderCest {
 	}
 
 	public function update( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendPUT( 'orders/orders/1' );
 		$I->seeResponseCodeIs( 404 );
 	}
 
 	public function create( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
 		$I->sendPOST( 'orders/orders', [
 			'ordered_services' => [
 				[
@@ -85,8 +88,41 @@ class OrderCest {
 	}
 
 	public function delete( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
 		$I->sendDELETE( 'orders/orders/1' );
 		$I->seeResponseCodeIs( 204 );
 	}
+
+	public function deleteOnlyAdmins( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
+		$I->sendDELETE( 'orders/orders/1' );
+		$I->seeResponseCodeIs( 403 );
+	}
+
+	public function indexForRegularUser( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
+		$I->sendGET( 'orders/orders' );
+		$I->seeResponseCodeIs( 200 );
+		$orders = $I->grabDataFromResponseByJsonPath('')[0];
+		$I->assertEquals(1,count($orders));
+		$I->assertEquals(1,$orders[0]['client_id']);
+	}
+
+	public function indexForAdminUser( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(1);
+		$I->sendGET( 'orders/orders' );
+		$I->seeResponseCodeIs( 200 );
+		$orders = $I->grabDataFromResponseByJsonPath('')[0];
+		$I->assertEquals(2,count($orders));
+	}
+
+	public function viewAnotherOrdersForAdmin( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
+		$I->sendGET( 'orders/orders/2' );
+		$I->seeResponseIsJson();
+		$I->seeResponseCodeIs( 403 );
+	}
+
+
 
 }

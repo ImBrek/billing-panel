@@ -117,4 +117,17 @@ class ServiceCest {
 		$I->seeResponseCodeIs( 204 );
 	}
 
+	public function createOnlyAdmins( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
+		$I->sendPOST( 'services-types/services', [
+			'title'       => 'test_new',
+			'type'        => 1,
+			'cost'        => 1000,
+			'category_id' => 1
+		] );
+		$I->seeResponseIsJson();
+		$I->seeResponseCodeIs( 403 );
+	}
+
+
 }

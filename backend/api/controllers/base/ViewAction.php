@@ -4,6 +4,7 @@ namespace api\controllers\base;
 
 use api\components\ApiQueryBuilder;
 use common\components\Helpers;
+use yii\web\NotFoundHttpException;
 
 class ViewAction extends \yii\rest\ViewAction {
 	public $queryBuilder;
@@ -39,6 +40,10 @@ class ViewAction extends \yii\rest\ViewAction {
 		}
 
 		$model = $query->andWhere( [ 'id' => $id ] )->one();
+
+		if (!$model){
+			throw new NotFoundHttpException();
+		}
 
 		$expandFields = [ ];
 		$with         = [ ];
@@ -84,6 +89,7 @@ class ViewAction extends \yii\rest\ViewAction {
 		}
 
 		$m = [ $model ];
+
 		$model->find()->findWith( $with, $m );
 
 		if ( $this->checkAccess ) {

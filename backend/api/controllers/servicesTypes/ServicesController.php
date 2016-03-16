@@ -4,6 +4,7 @@ namespace api\controllers\servicesTypes;
 use api\controllers\base\BaseController;
 use common\models\servicesTypes\Option;
 use common\models\servicesTypes\Service;
+use yii\web\ForbiddenHttpException;
 use yii\web\HttpException;
 
 class ServicesController extends BaseController {
@@ -47,32 +48,32 @@ class ServicesController extends BaseController {
 		$params = \Yii::$app->getRequest()->getBodyParams();
 
 		if ( ! empty( $params['options'] ) ) {
-			$model->on(Service::EVENT_AFTER_UPDATE,function($event) use ($params){
+			$model->on( Service::EVENT_AFTER_UPDATE, function ( $event ) use ( $params ) {
 				/** @var Service $service */
 				$service = $event->sender;
 
 				foreach ( (array) $params['options'] as $row ) {
 					if ( $row['id'] ) {
 						$option = Option::findOne( $row['id'] );
-						if ( !empty($row['is_deleted']) && $row['is_deleted'] ) {
+						if ( ! empty( $row['is_deleted'] ) && $row['is_deleted'] ) {
 							$option->delete();
 						} else {
 							$option->attributes = $row;
-							if (!$option->save()){
-								$service->addError("options[{$option->id}]",$option->getErrors());
+							if ( ! $option->save() ) {
+								$service->addError( "options[{$option->id}]", $option->getErrors() );
 							}
 						}
 					} else {
-						$option = new Option();
-						$option->scenario = Option::SCENARIO_CREATE;
+						$option             = new Option();
+						$option->scenario   = Option::SCENARIO_CREATE;
 						$option->attributes = $row;
 						$option->service_id = $service->id;
-						if (!$option->save()){
-							$service->addError("options[]",$option->getErrors());
+						if ( ! $option->save() ) {
+							$service->addError( "options[]", $option->getErrors() );
 						}
 					}
 				}
-			});
+			} );
 		}
 
 		return $model;
@@ -81,12 +82,24 @@ class ServicesController extends BaseController {
 	public function behaviors() {
 		$behaviors = parent::behaviors();
 
-		if ($this->action->id == 'view' || $this->action->id == 'index'){
+		if ( $this->action->id == 'view' || $this->action->id == 'index' ) {
 			unset( $behaviors['authenticator'] );
 		}
 
 		return $behaviors;
 	}
 
+	/**
+	 * @inheritDoc
+	 */
+	public function checkAccess( $action, $model = null, $params = [ ] ) {
+		if ( $action == 'view' || $action == 'index' ) {
+			return;
+		}
+
+		if ( ! \Yii::$app->user->identity->is_admin ) {
+			throw new ForbiddenHttpException();
+		}
+	}
 
 }

@@ -1,36 +1,16 @@
 <?php
 namespace api\controllers;
 
+use api\components\CompositeAuth;
 use common\models\User;
+use yii\filters\auth\HttpBearerAuth;
+use yii\filters\auth\QueryParamAuth;
 use yii\rest\Controller;
 use yii\web\BadRequestHttpException;
 use yii\web\NotFoundHttpException;
 use yii\web\UnauthorizedHttpException;
 
 class TokensController extends Controller {
-
-	public function behaviors() {
-		$result                   = parent::behaviors();
-		$result['corsFilter']     = [
-			'class' => \yii\filters\Cors::className(),
-			'cors'  => [
-				'Origin'                         => [ '*' ],
-				'Access-Control-Request-Method'  => [ 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ],
-				'Access-Control-Request-Headers' => [ '*' ],
-			],
-
-		];
-//		$result['_authenticator'] = [
-//			'class'       => CompositeAuth::className(),
-//			'authMethods' => [
-//				HttpBearerAuth::className(),
-//				QueryParamAuth::className()
-//			]
-//		];
-
-		return $result;
-	}
-
 	public function getUser() {
 		$params = \Yii::$app->getRequest()->getBodyParams();
 
@@ -75,8 +55,24 @@ class TokensController extends Controller {
 		\Yii::$app->getResponse()->setStatusCode( 204 );
 	}
 
-	public function actionOptions(){
+	public function actionOptions() {
 
+	}
+
+	public function behaviors() {
+		$behaviors = parent::behaviors();
+
+		if ( $this->action->id == 'delete' ) {
+			$behaviors['authenticator'] = [
+				'class'       => CompositeAuth::className(),
+				'authMethods' => [
+					HttpBearerAuth::className(),
+					QueryParamAuth::className()
+				]
+			];
+		}
+
+		return $behaviors;
 	}
 
 }

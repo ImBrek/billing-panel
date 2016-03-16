@@ -65,4 +65,15 @@ class OptionCest {
 		$I->seeResponseCodeIs( 204 );
 	}
 
+	public function createOnlyAdmins( FunctionalTester $I ) {
+		$I->addAuthorizationHeader(2);
+		$I->sendPOST( 'services-types/options', [
+			'title' => 'test_new',
+			'cost'=>1000,
+			'service_id'=>4
+		] );
+		$I->seeResponseIsJson();
+		$I->seeResponseCodeIs( 403 );
+	}
+
 }

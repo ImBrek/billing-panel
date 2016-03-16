@@ -56,5 +56,16 @@ class TokensCest {
 		$I->seeResponseCodeIs( 401 );
 	}
 
+	public function delete(FunctionalTester $I){
+		$I->addAuthorizationHeader(2);
+		$I->sendDELETE('tokens/0');
+		$I->seeResponseCodeIs( 204 );
+	}
+
+	public function deleteOnlyAuth(FunctionalTester $I){
+		$I->sendDELETE('tokens/0');
+		$I->seeResponseCodeIs( 401 );
+	}
+
 
 }

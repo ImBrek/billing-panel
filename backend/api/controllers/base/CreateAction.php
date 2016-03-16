@@ -14,13 +14,14 @@ class CreateAction extends \yii\rest\CreateAction {
 	protected $transaction;
 
 	public function run() {
-		$this->transaction = \Yii::$app->db->beginTransaction();
 
 		$model = call_user_func( $this->objectCreator, $this );
 
 		if ( $this->checkAccess ) {
 			call_user_func( $this->checkAccess, $this->id, $model );
 		}
+
+		$this->transaction = \Yii::$app->db->beginTransaction();
 
 		try {
 			if ( $model->save() ) {

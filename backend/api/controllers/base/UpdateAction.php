@@ -15,7 +15,6 @@ class UpdateAction extends \yii\rest\UpdateAction {
 	 */
 	public function run( $id ) {
 		$this->transaction = \Yii::$app->db->beginTransaction();
-
 		try {
 			/* @var $model ActiveRecord */
 			$model = $this->findModel( $id );
@@ -23,7 +22,8 @@ class UpdateAction extends \yii\rest\UpdateAction {
 			if ( $this->checkAccess ) {
 				call_user_func( $this->checkAccess, $this->id, $model );
 			}
-			
+
+
 			$model = call_user_func( $this->objectUpdater,  $model);
 
 			if ( $model->save() === false && ! $model->hasErrors() ) {
