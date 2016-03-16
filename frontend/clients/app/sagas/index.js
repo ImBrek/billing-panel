@@ -6,9 +6,9 @@ import * as pageLogin from './pages/login'
 import * as pageOrders from './pages/orders'
 import * as login from './login'
 
-export default function* root () {
+export default function* root (getState) {
     yield [
-        fork(watchEntities),
+        fork(watchEntities,getState),
         fork(pageOrdersPublic.mainWatch),
         fork(pageOrders.mainWatch),
         fork(pageLogin.main),

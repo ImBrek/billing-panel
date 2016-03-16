@@ -5,7 +5,8 @@ import schemas from 'services/schemas';
 
 import {createCRUD} from './helpers';
 
-export const TOKEN = createCRUD('TOKEN')
+export const TOKEN = createCRUD('TOKEN');
+export const TOKEN_REQUIRED = 'TOKEN_REQUIRED';
 
 export const createToken = createAction(TOKEN.CREATE.REQUEST, (username, password) => {
     return {
@@ -29,6 +30,7 @@ export const deleteToken = createAction(TOKEN.DELETE.REQUEST, () => {
     }
 });
 
+export const tokenRequired = createAction(TOKEN_REQUIRED);
 
 //
 // export const login = function (username, password) {

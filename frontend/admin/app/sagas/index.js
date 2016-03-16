@@ -8,7 +8,7 @@ import * as pageServices from './pages/services'
 import * as login from './login'
 import * as pageOrders from './pages/orders'
 
-export default function* root () {
+export default function* root (getState) {
     yield [
         fork(categoryDialogs.watchUpdate),
         fork(categoryDialogs.watchDelete),
@@ -16,7 +16,7 @@ export default function* root () {
         fork(serviceDialogs.watchDelete),
         fork(addtServiceDialogs.watchUpdate),
         fork(addtServiceDialogs.watchDelete),
-        fork(watchEntities),
+        fork(watchEntities,getState),
         fork(pageServices.watchServices),
         fork(login.tokenControl),
         fork(login.form),

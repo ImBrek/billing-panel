@@ -55,7 +55,7 @@ class BaseController extends ActiveController {
 
 	public function behaviors() {
 		$result                   = parent::behaviors();
-		$result['corsFilter']     = [
+		$result['1corsFilter']     = [
 			'class' => \yii\filters\Cors::className(),
 			'cors'  => [
 				'Origin'                         => [ '*' ],
@@ -64,7 +64,7 @@ class BaseController extends ActiveController {
 			],
 
 		];
-		$result['authenticator'] = [
+		$result['_authenticator'] = [
 			'class'       => CompositeAuth::className(),
 			'authMethods' => [
 				HttpBearerAuth::className(),

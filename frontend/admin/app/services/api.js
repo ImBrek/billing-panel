@@ -41,12 +41,6 @@ export default function (options) {
     headers['Accept'] = 'application/json';
     headers['Content-Type'] = 'application/json';
 
-
-    //add authorization header
-    const token = JSON.parse(localStorage.getItem('billing.token'));
-    if (token) {
-        headers['Authorization'] = `Bearer ${token.accessToken}`
-    }
     return fetch(endpoint, {method, body, credentials, headers})
         .then(response => {
                 if (response.status == 204) {
@@ -57,7 +51,7 @@ export default function (options) {
         )
         .then(({json, response}) => {
             if (!response.ok) {
-                return Promise.reject(json)
+                return Promise.reject({json, response})
             }
             const camelizedJson = camelizeKeys(json);
             if (schema){
@@ -70,6 +64,9 @@ export default function (options) {
         })
         .then(
             response => ({response}),
-            error => ({error: error.message || 'Something bad happened'})
+            ({json, response}) => ({
+                error: json.message || 'Something bad happened',
+                response
+            })
         )
 }

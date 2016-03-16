@@ -22,4 +22,10 @@ return [
         ],
     ],
     'params' => $params,
+    'controllerMap' => [
+        'fixture' => [
+            'class' => 'yii\console\controllers\FixtureController',
+            'namespace' => 'tests\codeception\common\fixtures'
+        ],
+    ]
 ];

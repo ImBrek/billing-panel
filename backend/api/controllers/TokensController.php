@@ -62,8 +62,18 @@ class TokensController extends Controller {
 	public function behaviors() {
 		$behaviors = parent::behaviors();
 
+		$behaviors['corsFilter']     = [
+			'class' => \yii\filters\Cors::className(),
+			'cors'  => [
+				'Origin'                         => [ '*' ],
+				'Access-Control-Request-Method'  => [ 'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS' ],
+				'Access-Control-Request-Headers' => [ '*' ],
+			],
+
+		];
+
 		if ( $this->action->id == 'delete' ) {
-			$behaviors['authenticator'] = [
+			$behaviors['_authenticator'] = [
 				'class'       => CompositeAuth::className(),
 				'authMethods' => [
 					HttpBearerAuth::className(),
