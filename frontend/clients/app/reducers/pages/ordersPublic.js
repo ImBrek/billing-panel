@@ -30,9 +30,13 @@ export default function (state = {
                 currentPage:state.currentPage - 1
             });
         case SET:
-            return Object.assign({}, state, {
-                currentPage:action.payload
-            });
+            if (state.currentPage>action.payload){
+                return Object.assign({}, state, {
+                    currentPage:action.payload
+                });
+            } else {
+                return state;
+            }
         default:
             return state;
 

@@ -46,8 +46,6 @@ const validate = values => {
 })
 export default class ChooseServicesForm extends Component {
     static propTypes = {
-        fields: PropTypes.object.isRequired,
-        handleSubmit: PropTypes.func.isRequired
     };
 
     constructor (props) {
@@ -121,7 +119,7 @@ export default class ChooseServicesForm extends Component {
         if (selectedService) {
             const list = selectedService.descendants.map((addt, index)=> {
                 return (<div key={addt.id} className={classnames("form-group",{"has-error":descendants[index].optionId.error})}>
-                    <label className="col-sm-2 control-label">{addt.title}</label>
+                    <label className="col-sm-3 control-label">{addt.title}</label>
                     <div className="col-sm-9">
                         {this.renderAddtServiceInput(addt, descendants[index])}
                     </div>
@@ -188,7 +186,7 @@ export default class ChooseServicesForm extends Component {
 
         return (<form onSubmit={handleSubmit} className="form-horizontal">
                 <div className={classnames("form-group",{"has-error":categoryId.error})}>
-                    <label className="col-sm-2 control-label">Category</label>
+                    <label className="col-sm-3 control-label">Category</label>
                     <div className="col-sm-9">
                         <select {...categoryId} value={categoryId.value || ''} className="form-control">
                             {categoriesList}
@@ -196,7 +194,7 @@ export default class ChooseServicesForm extends Component {
                     </div>
                 </div>
                 <div className={classnames("form-group",{"has-error":serviceId.error})}>
-                    <label className="col-sm-2 control-label">Service</label>
+                    <label className="col-sm-3 control-label">Service</label>
                     <div className="col-sm-9">
                         <select {...serviceId} value={serviceId.value || ''} className="form-control"
                                                onChange={(e)=>{serviceId.onChange(e);this.loadAddtFields(e)}}>
@@ -206,13 +204,13 @@ export default class ChooseServicesForm extends Component {
                 </div>
                 {addtServicesList}
                 <div className="form-group">
-                    <label className="col-sm-2 control-label"><h3>Total cost</h3></label>
+                    <label className="col-sm-3 control-label"><h3>Total cost</h3></label>
                     <div className="col-sm-9">
                         <h3 className="form-control-static">{this.calcTotalCost()}</h3>
                     </div>
                 </div>
                 <div className="form-group">
-                    <div className="col-sm-offset-2 col-sm-9">
+                    <div className="col-sm-offset-3 col-sm-9">
                         <button type="submit" className="btn btn-primary" disabled={invalid}>
                             Next <i/>
                         </button>

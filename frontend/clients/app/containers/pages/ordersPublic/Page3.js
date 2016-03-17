@@ -30,10 +30,6 @@ const validate = values => {
 })
 export default class Page3 extends Component {
     static propTypes = {
-        fields: PropTypes.object.isRequired,
-        handleSubmit: PropTypes.func.isRequired,
-        prevPage: PropTypes.func.isRequired,
-        submitting: PropTypes.bool.isRequired
     };
 
     render() {
@@ -42,12 +38,12 @@ export default class Page3 extends Component {
             handleSubmit,
             prevPage,
             submitting,
-            error
+            invalid
         } = this.props;
 
         return (<form onSubmit={handleSubmit} className="form-horizontal">
                 <div className={classnames("form-group",{"has-error":paymentType.error})}>
-                    <label className="col-sm-2 control-label">Payment type</label>
+                    <label className="col-sm-3 control-label">Payment type</label>
                     <div className="col-sm-9">
                         <div className="radio">
                             <label>
@@ -68,11 +64,8 @@ export default class Page3 extends Component {
                 </div>
 
                 <div className="form-group">
-                    <div className="col-sm-offset-2 col-sm-9">
-                        <button type="button" onClick={prevPage} className="btn btn-primary">
-                            <i className="fa fa-arrow-left"></i> Back
-                        </button>
-                        <button type="submit" className="btn btn-primary" disabled={submitting || error}>
+                    <div className="col-sm-offset-3 col-sm-9">
+                        <button type="submit" className="btn btn-primary" disabled={submitting || invalid}>
                             {submitting ? <i className="fa fa-spin fa-spinner"></i> : null} Finish
                         </button>
                     </div>

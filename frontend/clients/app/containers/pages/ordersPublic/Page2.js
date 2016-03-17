@@ -23,8 +23,7 @@ export const selector = createSelector(
 
 @reduxForm({
     form: 'page2',
-    fields: ['customerType'],
-    destroyOnUnmount: false
+    fields: ['customerType']
 }, selector, {
     deleteToken,
     createToken,
@@ -42,18 +41,30 @@ export default class Page2 extends Component {
             nextPage,
             prevPage
         } = this.props;
-        const userBlock = <div className="row">
-            <div className="col-sm-9 col-sm-offset-2">
-                You are logged as UserId:{this.props.token && this.props.token.userId}
-                <button className="btn btn-primary" onClick={this.props.deleteToken}>Logout</button>
-                <button className="btn btn-primary" onClick={nextPage}> Next</button>
-            </div>
 
-        </div>;
+        const userBlock =
+            [<div className="row">
+                <div className="col-sm-4">
+                    <label>
+                        You are logged as
+                    </label>
+                </div>
+                <div className="col-sm-8">
+                    {this.props.user.username}
+                </div>
+            </div>,
+            <div className="row">
+                <div className="col-sm-offset-4">
+                    <button className="btn btn-primary" onClick={this.props.deleteToken}>Logout</button>
+                    <button className="btn btn-primary" onClick={nextPage}> Next</button>
+                </div>
+            </div>];
+
+
         return (<div>
             {(!this.props.token) && <form className="form-horizontal" onSubmit={handleSubmit}>
                 <div className={classnames("form-group",{"has-error":customerType.error})}>
-                    <label className="col-sm-2 control-label"></label>
+                    <label className="col-sm-3 control-label">Type</label>
                     <div className="col-sm-9">
                         <div className="radio">
                             <label>
@@ -70,8 +81,10 @@ export default class Page2 extends Component {
                     </div>
                 </div>
             </form>}
-            {(customerType.value == 0 && !this.props.token) && <RegisterUserForm prevPage={prevPage} onSubmit={this.props.createUser}/>}
-            {(customerType.value == 1 && !this.props.token) && <LoginForm prevPage={prevPage} onSubmit={data=>this.props.createToken(data.username, data.password)}></LoginForm>}
+            {(customerType.value == 0 && !this.props.token) &&
+            <RegisterUserForm prevPage={prevPage} onSubmit={this.props.createUser}/>}
+            {(customerType.value == 1 && !this.props.token) && <LoginForm prevPage={prevPage}
+                                                                          onSubmit={data=>this.props.createToken(data.username, data.password)}></LoginForm>}
             {this.props.token && userBlock}
         </div>);
     }

@@ -8,7 +8,7 @@ use yii\web\NotFoundHttpException;
 
 class UsersController extends BaseController {
 	public $modelClass = 'common\models\User';
-	
+
 	public function actionCheck( $username = '', $email = '', $jabber = '' ) {
 		if ( \Yii::$app->getRequest()->getMethod() == 'OPTIONS' ) {
 			return;
@@ -55,7 +55,7 @@ class UsersController extends BaseController {
 	public function behaviors() {
 		$behaviors = parent::behaviors();
 		if ( $this->action->id == 'check' || $this->action->id == 'create' ) {
-			unset( $behaviors['authenticator'] );
+			unset( $behaviors['_authenticator'] );
 		}
 
 		return $behaviors;

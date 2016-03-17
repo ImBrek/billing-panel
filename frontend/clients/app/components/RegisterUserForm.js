@@ -13,10 +13,15 @@ const asyncValidate = (values) => {
             email: values.email
         }
     }).then((data)=> {
-        if (data.error) {
+        const {error,response} = data;
+        if (error) {
             return;
         } else {
-            return Promise.reject(data.response);
+            return Promise.reject({
+                email:response.email && 'Email is already taken',
+                jabber:response.jabber && 'Jabber is already taken',
+                username:response.username && 'Username is already taken'
+            });
         }
     });
 };
@@ -43,10 +48,6 @@ const validate = values => {
     if (!values.name) {
         errors.name = 'Required';
     }
-    if (!values.customerType) {
-        errors.customerType = 'Required';
-    }
-    return {};
     return errors;
 };
 
@@ -63,7 +64,7 @@ var a = (new Date().getTime());
         initialValues: {
             username: 'aa' + a,
             password: 'aa',
-            email: 'bre@ff.ru' + a,
+            email: a+'bre@ff.ru',
             jabber: 'bre@ff.ru' + a,
             name: 'Вася'
         }
@@ -78,57 +79,57 @@ export default class RegisterForm extends Component {
             fields: {username, password, email, jabber, name},
             handleSubmit,
             submitting,
-            asyncValidating
+            asyncValidating,
+            invalid
         } = this.props;
         return (
             <form onSubmit={handleSubmit} className="form-horizontal">
                 <div className={classnames("form-group",{"has-error":name.error})}>
-                    <label className="col-sm-2 control-label">Your name</label>
+                    <label className="col-sm-3 control-label">Your name</label>
                     <div className="col-sm-9">
                         <input type="text" maxLength="255" className="form-control" {...name}/>
                     </div>
                 </div>
                 <div className={classnames("form-group",{"has-error":email.error})}>
-                    <label className="col-sm-2 control-label">Email</label>
+                    <label className="col-sm-3 control-label">Email</label>
                     <div className="col-sm-9">
                         <input type="text" maxLength="255" className="form-control" {...email}/>
                         {asyncValidating === 'email' &&
                         <span className="form-control-feedback fa fa-spin fa-spinner"> </span>}
                         {email.error &&
-                        <span className="help-block">Email is already taken</span>}
+                        <span className="help-block">{email.error}</span>}
                     </div>
                 </div>
                 <div className={classnames("form-group",{"has-error":jabber.error})}>
-                    <label className="col-sm-2 control-label">Jabber</label>
+                    <label className="col-sm-3 control-label">Jabber</label>
                     <div className="col-sm-9">
                         <input type="text" maxLength="255" className="form-control" {...jabber}/>
                         {asyncValidating === 'jabber' &&
                         <span className="form-control-feedback fa fa-spin fa-spinner"> </span>}
                         {jabber.error &&
-                        <span className="help-block">Jabber is already taken</span>}
+                        <span className="help-block">{jabber.error}</span>}
                     </div>
                 </div>
 
                 <div className={classnames("form-group has-feedback",{"has-error":username.error})}>
-                    <label className="col-sm-2 control-label">Username</label>
+                    <label className="col-sm-3 control-label">Username</label>
                     <div className="col-sm-9">
                         <input type="text" maxLength="255" className="form-control" {...username}/>
                         {asyncValidating === 'username' &&
                         <span className="form-control-feedback fa fa-spin fa-spinner"> </span>}
                         {username.error &&
-                        <span className="help-block">Username is already taken</span>}
+                        <span className="help-block">{username.error}</span>}
                     </div>
                 </div>
                 <div className={classnames("form-group",{"has-error":password.error})}>
-                    <label className="col-sm-2 control-label">Password</label>
+                    <label className="col-sm-3 control-label">Password</label>
                     <div className="col-sm-9">
                         <input type="password" maxLength="255" className="form-control" {...password}/>
                     </div>
                 </div>
                 <div className="form-group">
-                    <div className="col-sm-offset-2 col-sm-9">
-                        <button className="btn btn-primary" type="button" onClick={this.props.prevPage}><i className="fa fa-arrow-left"></i> Back</button>
-                        <button className="btn btn-primary" disabled={submitting}>
+                    <div className="col-sm-offset-3 col-sm-9">
+                        <button className="btn btn-primary" disabled={submitting || invalid}>
                             {submitting ? <i className="fa fa-spin fa-spinner"></i> : null} Register
                         </button>
                     </div>

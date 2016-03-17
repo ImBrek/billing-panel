@@ -36,30 +36,38 @@ export default class OrderForm extends Component {
     save (data) {
         const services = data.descendants;
         services.push({
-            serviceId:data.serviceId
+            serviceId: data.serviceId
         })
         this.props.createOrder({
-            clientId: 1,
             orderedServices: services,
             paymentType: data.paymentType
         })
+    }
+    setPage(page){
+        this.props.setPage(page);
     }
 
     render () {
         const {currentPage} = this.props;
         return (
-            <div className="col-sm-8">
+            <div className="col-sm-5">
                 <ul className="nav nav-pills">
-                    <li className={classnames({active:currentPage ===0})}><a href="#"><h4>Select services</h4></a></li>
-                    <li className={classnames({active:currentPage ===1})}><a href="#"><h4>Register/Log in</h4></a></li>
-                    <li className={classnames({active:currentPage ===2})}><a href="#"><h4>Payment</h4></a></li>
+                    <li className={classnames({active:currentPage ===0})}>
+                        <a href="#" onClick={()=>{this.setPage(0)}}><h4>Select services</h4></a>
+                    </li>
+                    <li className={classnames({active:currentPage ===1,disabled:currentPage<1})}>
+                        <a href="#" onClick={()=>{this.setPage(1)}}><h4>Register/Log in</h4></a>
+                    </li>
+                    <li className={classnames({active:currentPage ===2,disabled:currentPage<2})}>
+                        <a href="#" onClick={()=>{this.setPage(2)}}><h4>Payment</h4></a>
+                    </li>
                 </ul>
                 <hr/>
                 <div>
                     {currentPage === 0 && <Page1 onSubmit={this.props.nextPage} entities={this.props.entities}
                                                  servicesTree={this.props.servicesTree}/>}
-                    {currentPage === 1 && <Page2 prevPage={this.props.prevPage} nextPage={this.props.nextPage}/>}
-                    {currentPage === 2 && <Page3 prevPage={this.props.prevPage} onSubmit={this.save}/>}
+                    {currentPage === 1 && <Page2 nextPage={this.props.nextPage}/>}
+                    {currentPage === 2 && <Page3 onSubmit={this.save}/>}
                 </div>
             </div>
         );
